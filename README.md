@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # TFM — Super-Resolución de Imágenes Citogenéticas con Modelos de Difusión + YOLOv11
 
 > **Trabajo de Fin de Máster**  
@@ -157,3 +158,6 @@ python scripts/06_evaluate_yolo.py \
 - `logging` a consola + `results/logs/<exp_name>.log`.
 - Gestión de errores suave: warning + continue (sin crash).
 - Verificación de CUDA al inicio de cada script.
+=======
+# tfm-citogenetica
+>>>>>>> e44a874129092de689c1905920731915e84b6b7c
