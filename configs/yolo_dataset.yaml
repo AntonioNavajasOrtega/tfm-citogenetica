@@ -1,0 +1,12 @@
+# ==============================================================
+# Formato Ultralytics YOLO — Dataset citogenético
+# nc: 1 clase (cromosoma)
+# ==============================================================
+
+path: ../data/processed      # raíz del dataset (relativa a este yaml)
+train: train.txt             # lista de paths de imágenes de entrenamiento
+val: val.txt                 # lista de paths de imágenes de validación
+
+nc: 1
+names:
+  - chromosome

@@ -1,0 +1,128 @@
+ANTEPROYECTO DEL
+TRABAJO DE FIN DE MÁSTER
+INFORMACIÓN GENERAL
+
+INTRODUCCIÓN
+Contextualización del problema a resolver. Descripción detallada de la motivación de este TFM y el
+dominio de aplicación.
+El análisis de imágenes de cromosomas es una tarea central en citogenética y biología molecular, ya que los cromosomas
+contienen el ADN que codifica la información genética de un organismo. Alteraciones en su número o estructura pueden
+causar enfermedades genéticas como el síndrome de Down (trisomía 21), el síndrome de Turner (monosomía X) o ciertos
+tipos de cáncer derivados de translocaciones o deleciones cromosómicas. Por ello, su estudio es fundamental en el
+diagnóstico clínico, prenatal y en la investigación genética. Además, el análisis cromosómico permite evaluar la estabilidad
+genómica, identificar marcadores citogenéticos y apoyar decisiones terapéuticas en contextos oncológicos y reproductivos.
+Sin embargo, los cromosomas presentan un alto grado de complejidad: son visualmente similares entre sí, varían en
+tamaño, forma y patrón de bandas, y su análisis manual bajo microscopio es lento, propenso a errores y requiere personal
+altamente especializado. A esto se suma la variabilidad introducida por las condiciones de preparación de las muestras y
+por los dispositivos de adquisición, lo que puede afectar la calidad y homogeneidad de las imágenes obtenidas. Estos
+factores limitan la rapidez, consistencia y escalabilidad del análisis tradicional, dificultando el cribado masivo de muestras
+y el estudio detallado de anomalías estructurales.
+La automatización mediante inteligencia artificial (IA) y visión computacional ofrece soluciones significativas. Algoritmos
+de aprendizaje profundo del estado del arte, como redes neuronales convolucionales y modelos de difusión, permiten
+aprender representaciones directamente a partir de los datos, identificando patrones espaciales complejos que resultan
+difíciles de definir mediante métodos convencionales. Estos enfoques posibilitan la clasificación automática de
+cromosomas, la detección de anomalías y la cuantificación de patrones de bandas de forma precisa y consistente,
+reduciendo errores humanos y aumentando la eficiencia del análisis. Esto no solo acelera los procesos clínicos y de
+investigación, sino que también habilita la detección temprana de alteraciones genéticas y el análisis de grandes volúmenes
+de datos cromosómicos.
+Además, la aplicación de técnicas de super-resolución y modelos avanzados de difusión contribuye a mejorar la calidad
+visual de las imágenes, permitiendo reconstruir detalles finos esenciales para el análisis automatizado. La mejora en la
+resolución puede resultar determinante cuando se trata de identificar pequeñas variaciones estructurales o patrones de
+bandas sutiles. Esto amplía el potencial de la investigación, facilitando estudios más precisos sobre la estructura y función
+del genoma, así como la evolución genética, y abre la puerta a descubrimientos científicos más rápidos y rigurosos.
+OBJETIVOS
+Descripción detallada de este TFM. Preguntas de investigación a abordar (si procede).
+El objetivo principal de este TFM es estudiar si los modelos de difusión pueden mejorar la resolución de imágenes
+citogenéticas, preservando los detalles estructurales importantes para el análisis cromosómico y el diagnóstico asistido por
+sistemas automáticos. De forma concreta, se pretende:
+1. Desarrollar un sistema eficaz para la mejora de resolución de imágenes citogenéticas que maximice la
+precisión visual mientras se preserva la integridad de los detalles relevantes.
+2. Evaluar si esta mejora se traduce en un mayor rendimiento de detección automática de cromosomas.
+3. Explorar distintas configuraciones y ajustes de StableSR para optimizar la calidad de reconstrucción.
+Se hará especial hincapié en la fidelidad estructural y la utilidad funcional de las imágenes, mientras que la eficiencia
+computacional tendrá un carácter secundario, dado que el procesamiento no requiere tiempo real.
+ENTREGABLES
+Listado de resultados que generará el TFM (aplicaciones, estudios, manuales, etc.)
+Código de las implementaciones desarrolladas
+Memoria
+MÉTODOS Y FASES DE TRABAJO
+METODOLOGÍA:
+Descripción de la metodología empleada en el desarrollo del TFM. Especificar cómo se va a desarrollar.
+Concretar si se trata de alguna metodología existente. En caso contrario, describir y justificar
+adecuadamente los métodos que se aplicarán.
+El desarrollo de este proyecto se llevará a cabo mediante una metodología ágil, que permitirá flexibilidad y adaptación en
+cada fase del trabajo. Se adoptará un enfoque iterativo, de manera que el modelo pueda ajustarse de forma continua en
+función de los resultados obtenidos en ejecuciones previas. Para garantizar la validez del proceso y reducir el riesgo de
+sobreajuste, el modelo se entrenará utilizando validación cruzada.
+El proyecto partirá de una versión base del sistema, a la cual se irán incorporando mejoras de manera incremental, sin
+comprometer la estructura existente. Este enfoque facilita una rápida adaptación frente a imprevistos técnicos y optimiza la
+eficiencia en el desarrollo.
+Paralelamente, se seguirán las buenas prácticas del método científico, que incluyen: observación, formulación de hipótesis,
+revisión de literatura, experimentación, análisis de resultados, elaboración de conclusiones y comunicación de los
+hallazgos. La combinación de un enfoque ágil con el rigor científico asegura que el proyecto avance de manera
+estructurada, eficiente y reproducible.
+FASES DE TRABAJO:
+Enumeración y breve descripción de las fases de trabajo para el desarrollo del TFM.
+Durante el desarrollo del proyecto se llevarán a cabo las siguientes fases:
+1. Revisión bibliográfica y análisis de trabajos previos: Se realizará un estudio detallado de la literatura
+relacionada con super-resolución de imágenes biomédicas, modelos de difusión y detección de objetivos en
+imágenes relacionadas con histología y/o citológicas. Esto permitirá establecer las bases teóricas y
+matemáticas, así como identificar enfoques exitosos aplicables a imágenes citogenéticas.
+2. Preparación del entorno de trabajo: Configuración del entorno de desarrollo, instalación de dependencias y
+comprobación del correcto funcionamiento de las herramientas necesarias para el procesamiento de imágenes,
+entrenamiento de modelo de difusión StableSR y evaluación con YOLO11.
+3. Análisis de algoritmos y del conjunto de datos: Se llevará a cabo un análisis detallado del conjunto de
+imágenes con el fin de definir estrategias adecuadas de preprocesamiento y aumento de datos. Paralelamente,
+se realizará un estudio del funcionamiento interno de YOLO11, así como de los componentes de difusión,
+como el noise scheduler, el sampling, la red U-Net y los mecanismos de pérdida, con el objetivo de
+comprender y modificar el proceso de difusión para optimizar la reconstrucción de detalles cromosómicos.
+4. Implementación de la línea base: Se establecerá un modelo base YOLO11 con finetuning usando las imágenes
+a resolución original, para poder comparar posteriormente la posible mejora al aplicar superresolución a las
+imágenes de validación.
+5. Iteraciones experimentales con modelos de difusión: A partir de la línea base, se explorarán diferentes
+configuraciones para mejorar la super-resolución, incluyendo:
+1. Ajustes en noise schedulers y métodos de sampling deterministas vs. estocásticos.
+2. Posible incorporación de Fourier features o modificación de funciones de pérdida.
+3. Variaciones en parámetros de StableSR o en su arquitectura.
+Cada iteración conlleva su validación cruzada correspondiente.
+6. Se evaluará el rendimiento del modelo comparando los resultados obtenidos sobre imágenes con superresolución frente a las originales, utilizando métricas de calidad de imagen (PSNR, SSIM) y métricas de
+detección (mAP, precisión, recall y F1-score).
+7. Análisis de resultados: Se comentarán los patrones y tendencias observadas en las imágenes tras cada iteración
+de super-resolución, verificando si la visibilidad de detalles cromosómicos y la detección automática han
+mejorado o empeorado. Se analizarán los retos encontrados, se formularán hipótesis sobre el rendimiento de
+distintos modelos y se identificarán los conceptos más importantes, así como las posibles oportunidades de
+optimización.
+8. Documentación y comunicación de resultados: Redacción de la memoria final, incluyendo metodología,
+resultados, análisis comparativo entre configuraciones, conclusiones y posibles líneas futuras de investigación.
+ENTORNO TECNOLÓGICO
+TECNOLOGÍAS EMPLEADAS:
+Enumeración de las tecnologías utilizadas (lenguajes de programación, frameworks, sistemas gestores de
+bases de datos, etc.) en el desarrollo del TFM.
+Lenguaje de programación: Python 3.10
+Tecnologías principales: Ultralytics YOLO11, StableSR, Overleaf, FileZilla , X2Go
+Otras dependencias: PyTorch, Scikit-learn, Numpy, Pillow, Matplotlib, OpenCV, Torchvision, Xformers, Transformers
+RECURSOS SOFTWARE Y HARDWARE:
+Listado de dispositivos (placas de desarrollo, microcontroladores, procesadores, sensores, robots, etc.) o
+software (IDE, editores, etc.) empleados en el desarrollo del TFM.
+IDE: Visual Studio Code
+Gestor de Entorno Virtual: Anaconda
+Máquina de Ejecución 1: Servidor Grupo Investigación ICAI con GPU RTX 3080 10 GB VRAM
+Máquina de Ejecución 2: Computador Personal con GPU RTX 5060 8 GB VRAM
+CONJUNTOS DE DATOS (DATASETS):
+Listado de los conjuntos de datos (datasets) que serán empleados en el desarrollo del TFM (si procede),
+detallando en su caso su procedencia y licencia de uso.
+Para el entrenamiento y la validación se utilizarán conjuntos de datos privados proporcionados por el grupo de
+investigación ICAI, en colaboración con el Dr. Adayabalam S. Balajee (REAC/TS, ORISE, Tennessee, EE. UU.). El
+conjunto de datos consta de 50 imágenes de resolución variable que muestran cromosomas en blanco y negro, algunas de
+las cuales presentan artefactos de forma circular.
+REFERENCIAS
+Listado de referencias (artículos científicos, libros, páginas web, etc.)
+[1] Rahima Khanam et al. (2024). [2410.17725v1] YOLOv11: An Overview of the Key Architectural Enhancements
+[2] Ultralytics Team. (2024) Ultralytics YOLO11 - Ultralytics YOLO Docs
+[3] Jianyi Wang et al. (2023). [2305.07015] Exploiting Diffusion Prior for Real-World Image Super-Resolution
+[4] Ignacio Atencia Jiménez et al. (2024). Neural Network Ensemble to Detect Dicentric Chromosomes in Metaphase
+Images
+[5] L. Antiga, E. Stevens and T. Viehmann. (2020). Deep Learning with Pytorch. New York: Manning Publications Co.
+LLC.
+[6] Harshith Bachimanchi et al. (2024). [2409.16488] Diffusion Models to Enhance the Resolution of Microscopy Images:
+A Tutorial
