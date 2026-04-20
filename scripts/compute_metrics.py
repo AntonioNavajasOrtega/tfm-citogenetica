@@ -1,11 +1,10 @@
 """
-07_compute_metrics.py — Cálculo de métricas de calidad de imagen (PSNR, SSIM, LPIPS).
+compute_metrics.py — calcula psnr, ssim y lpips entre imágenes sr y sus referencias hr.
 
-Calcula métricas de calidad entre imágenes SR y sus referencias HR.
-Guarda media, std y valor por imagen en CSV.
+guarda por imagen y resumen estadístico en csv.
 
-Uso:
-    python scripts/07_compute_metrics.py \
+uso:
+    python scripts/compute_metrics.py \
         --sr_dir data/sr/x2/exp0_default \
         --hr_dir data/processed \
         --output_csv results/metrics/sr_exp0_default.csv \
@@ -23,10 +22,6 @@ from pathlib import Path
 import numpy as np
 from tqdm import tqdm
 
-
-# ---------------------------------------------------------------------------
-# Utilidades
-# ---------------------------------------------------------------------------
 
 def setup_logging(log_path: Path, level: str = "INFO") -> logging.Logger:
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -51,9 +46,9 @@ def check_cuda() -> "torch.device | None":
     try:
         import torch
         if torch.cuda.is_available():
-            logging.info(f"CUDA disponible: {torch.cuda.get_device_name(0)}")
+            logging.info(f"cuda: {torch.cuda.get_device_name(0)}")
             return torch.device("cuda")
-        logging.warning("CUDA NO disponible.")
+        logging.warning("sin cuda")
         return torch.device("cpu")
     except ImportError:
         return None
@@ -62,18 +57,14 @@ def check_cuda() -> "torch.device | None":
 SUPPORTED_EXTS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
 
 
-# ---------------------------------------------------------------------------
-# Métricas
-# ---------------------------------------------------------------------------
-
 def compute_psnr(img_sr: np.ndarray, img_hr: np.ndarray) -> float:
-    """PSNR en dB (mayor = mejor)."""
+    # mayor psnr = mejor calidad
     from skimage.metrics import peak_signal_noise_ratio
     return float(peak_signal_noise_ratio(img_hr, img_sr, data_range=255))
 
 
 def compute_ssim(img_sr: np.ndarray, img_hr: np.ndarray) -> float:
-    """SSIM escalar (más cercano a 1 = mejor)."""
+    # ssim entre 0 y 1; más cerca de 1 es mejor
     from skimage.metrics import structural_similarity
     if img_sr.ndim == 3:
         return float(structural_similarity(img_hr, img_sr, channel_axis=2, data_range=255))
@@ -82,15 +73,15 @@ def compute_ssim(img_sr: np.ndarray, img_hr: np.ndarray) -> float:
 
 
 def compute_lpips(img_sr: np.ndarray, img_hr: np.ndarray, lpips_fn, device) -> float:
-    """LPIPS perceptual (menor = mejor). Requiere GPU para ser práctico."""
+    # lpips perceptual; menor = más parecido al ojo humano
     import torch
     from torchvision import transforms
+    from PIL import Image
 
     to_tensor = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
     ])
-    from PIL import Image
     sr_t = to_tensor(Image.fromarray(img_sr if img_sr.ndim == 3 else np.stack([img_sr]*3, axis=-1))).unsqueeze(0).to(device)
     hr_t = to_tensor(Image.fromarray(img_hr if img_hr.ndim == 3 else np.stack([img_hr]*3, axis=-1))).unsqueeze(0).to(device)
     with torch.no_grad():
@@ -99,7 +90,7 @@ def compute_lpips(img_sr: np.ndarray, img_hr: np.ndarray, lpips_fn, device) -> f
 
 
 def load_image_pair(sr_path: Path, hr_dir: Path) -> tuple[np.ndarray, np.ndarray] | None:
-    """Carga el par SR / HR. Redimensiona SR a tamaño HR si difieren."""
+    # busca el hr con el mismo nombre; redimensiona sr si difieren
     import cv2
 
     hr_candidates = [
@@ -108,20 +99,18 @@ def load_image_pair(sr_path: Path, hr_dir: Path) -> tuple[np.ndarray, np.ndarray
     ]
     hr_path = next((c for c in hr_candidates if c.exists()), None)
     if hr_path is None:
-        logging.warning(f"  Sin contraparte HR para: {sr_path.name}. Se omite.")
+        logging.warning(f"  sin hr para: {sr_path.name}")
         return None
 
     sr = cv2.imread(str(sr_path), cv2.IMREAD_UNCHANGED)
     hr = cv2.imread(str(hr_path), cv2.IMREAD_UNCHANGED)
     if sr is None or hr is None:
-        logging.warning(f"  Fallo al leer par: {sr_path.name}. Se omite.")
+        logging.warning(f"  fallo al leer: {sr_path.name}")
         return None
 
-    # Asegurar mismo tamaño
     if sr.shape[:2] != hr.shape[:2]:
         sr = cv2.resize(sr, (hr.shape[1], hr.shape[0]), interpolation=cv2.INTER_LANCZOS4)
 
-    # Convertir a RGB si necesario
     if len(sr.shape) == 3 and sr.shape[2] == 3:
         sr = cv2.cvtColor(sr, cv2.COLOR_BGR2RGB)
         hr = cv2.cvtColor(hr, cv2.COLOR_BGR2RGB)
@@ -129,13 +118,9 @@ def load_image_pair(sr_path: Path, hr_dir: Path) -> tuple[np.ndarray, np.ndarray
     return sr, hr
 
 
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Calcula métricas de calidad de imagen SR vs HR (PSNR, SSIM, LPIPS)."
+        description="calcula métricas de calidad sr vs hr (psnr, ssim, lpips)."
     )
     parser.add_argument("--sr_dir", type=Path, required=True)
     parser.add_argument("--hr_dir", type=Path, required=True)
@@ -152,10 +137,6 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
 def main() -> None:
     args = parse_args()
     log_file = Path("results/logs") / f"{args.exp_name}.log"
@@ -164,7 +145,7 @@ def main() -> None:
 
     logger = logging.getLogger(__name__)
     logger.info("=" * 60)
-    logger.info("SCRIPT 07 — MÉTRICAS DE IMAGEN")
+    logger.info("MÉTRICAS DE IMAGEN")
     logger.info("=" * 60)
     for k, v in vars(args).items():
         logger.info(f"  {k}: {v}")
@@ -172,7 +153,6 @@ def main() -> None:
 
     device = check_cuda()
 
-    # Cargar LPIPS si se solicita
     lpips_fn = None
     if "lpips" in args.metrics:
         try:
@@ -180,22 +160,22 @@ def main() -> None:
             import torch
             device = device or torch.device("cpu")
             lpips_fn = lpips_lib.LPIPS(net="vgg").to(device)
-            logger.info("LPIPS cargado.")
+            logger.info("lpips cargado")
         except ImportError:
-            logger.warning("lpips no instalado. Se omitirá la métrica LPIPS.")
+            logger.warning("lpips no instalado, se omite esa métrica")
             args.metrics = [m for m in args.metrics if m != "lpips"]
 
     sr_paths = sorted(p for p in args.sr_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXTS)
     if not sr_paths:
-        logger.error(f"No se encontraron imágenes SR en {args.sr_dir}.")
+        logger.error(f"no hay imágenes sr en {args.sr_dir}")
         sys.exit(1)
 
-    logger.info(f"Imágenes SR encontradas: {len(sr_paths)}")
+    logger.info(f"imágenes sr: {len(sr_paths)}")
 
     fieldnames = ["image"] + args.metrics
     rows = []
 
-    for sr_path in tqdm(sr_paths, desc="Calculando métricas", unit="img"):
+    for sr_path in tqdm(sr_paths, desc="calculando métricas", unit="img"):
         pair = load_image_pair(sr_path, args.hr_dir)
         if pair is None:
             continue
@@ -210,7 +190,7 @@ def main() -> None:
             if "lpips" in args.metrics and lpips_fn is not None:
                 row["lpips"] = compute_lpips(sr_arr, hr_arr, lpips_fn, device)
         except Exception as e:
-            logger.warning(f"  Error calculando métricas para {sr_path.name}: {e}")
+            logger.warning(f"  error en {sr_path.name}: {e}")
             continue
 
         rows.append(row)
@@ -219,12 +199,12 @@ def main() -> None:
         )
 
     if not rows:
-        logger.error("No se calcularon métricas para ninguna imagen.")
+        logger.error("sin métricas calculadas")
         sys.exit(1)
 
-    # Resumen estadístico
+    # resumen estadístico al final
     logger.info("\n" + "=" * 60)
-    logger.info(f"RESUMEN — {args.exp_name}")
+    logger.info(f"resumen — {args.exp_name}")
     logger.info("=" * 60)
     summary_rows = []
     for metric in args.metrics:
@@ -232,17 +212,16 @@ def main() -> None:
         mean_val = np.mean(vals)
         std_val  = np.std(vals)
         logger.info(f"  {metric.upper():6s}: {mean_val:.4f} ± {std_val:.4f}")
-        summary_rows.append({"image": f"MEDIA_{metric}", metric: mean_val})
-        summary_rows.append({"image": f"STD_{metric}",   metric: std_val})
+        summary_rows.append({"image": f"media_{metric}", metric: mean_val})
+        summary_rows.append({"image": f"std_{metric}",   metric: std_val})
 
-    # Guardar CSV completo
     args.output_csv.parent.mkdir(parents=True, exist_ok=True)
     with args.output_csv.open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
         writer.writerows(summary_rows)
-    logger.info(f"\nMétricas guardadas en: {args.output_csv}")
+    logger.info(f"\nmétricas en: {args.output_csv}")
 
 
 if __name__ == "__main__":

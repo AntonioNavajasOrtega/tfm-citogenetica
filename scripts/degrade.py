@@ -1,19 +1,17 @@
 """
-02_degrade.py — Generación de imágenes LR simuladas (low-resolution).
+degrade.py — genera imágenes lr simuladas a partir de las hr procesadas.
 
-Modos de degradación:
-  - bicubic   : downsampling bicúbico clásico
-  - bilinear  : downsampling bilineal
-  - blur_noise: blur gaussiano + ruido + downsampling (simula condiciones reales)
+modos:
+  - bicubic    : downsampling bicúbico clásico
+  - bilinear   : downsampling bilineal
+  - blur_noise : blur + ruido gaussiano + downsampling (simula condiciones reales)
 
-Uso:
-    python scripts/02_degrade.py \
+uso:
+    python scripts/degrade.py \
         --input_dir data/processed \
         --output_dir data/lr/x2 \
         --scale 2 \
-        --degradation blur_noise \
-        --noise_sigma 5 \
-        --blur_kernel 3
+        --degradation blur_noise
 """
 
 import argparse
@@ -26,10 +24,6 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
-
-# ---------------------------------------------------------------------------
-# Utilidades
-# ---------------------------------------------------------------------------
 
 def setup_logging(log_path: Path, level: str = "INFO") -> logging.Logger:
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -54,29 +48,25 @@ def check_cuda() -> None:
     try:
         import torch
         if torch.cuda.is_available():
-            logging.info(f"CUDA disponible: {torch.cuda.get_device_name(0)}")
+            logging.info(f"cuda: {torch.cuda.get_device_name(0)}")
         else:
-            logging.warning("CUDA NO disponible.")
+            logging.warning("sin cuda")
     except ImportError:
         pass
 
 
 SUPPORTED_EXTS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
 
-
-# ---------------------------------------------------------------------------
-# Degradación
-# ---------------------------------------------------------------------------
-
+# mapa de interpolación por modo de degradación
 INTERP_MAP = {
-    "bicubic": cv2.INTER_CUBIC,
-    "bilinear": cv2.INTER_LINEAR,
-    "blur_noise": cv2.INTER_CUBIC,   # se aplica blur+noise antes
+    "bicubic":    cv2.INTER_CUBIC,
+    "bilinear":   cv2.INTER_LINEAR,
+    "blur_noise": cv2.INTER_CUBIC,
 }
 
 
 def apply_blur_noise(img: np.ndarray, noise_sigma: float, blur_kernel: int) -> np.ndarray:
-    """Aplica blur gaussiano y ruido gaussiano aditivo."""
+    # primero blur, luego ruido aditivo gaussiano
     if blur_kernel > 0 and blur_kernel % 2 == 1:
         img = cv2.GaussianBlur(img, (blur_kernel, blur_kernel), 0)
     if noise_sigma > 0:
@@ -103,13 +93,9 @@ def degrade_image(
     return lr
 
 
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Genera imágenes LR simuladas para entrenamiento SR."
+        description="genera imágenes lr simuladas para entrenamiento sr."
     )
     parser.add_argument("--input_dir", type=Path, required=True)
     parser.add_argument("--output_dir", type=Path, required=True)
@@ -127,10 +113,6 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
 def main() -> None:
     args = parse_args()
     log_file = Path("results/logs") / f"{args.exp_name}.log"
@@ -140,7 +122,7 @@ def main() -> None:
 
     logger = logging.getLogger(__name__)
     logger.info("=" * 60)
-    logger.info("SCRIPT 02 — DEGRADACIÓN LR")
+    logger.info("DEGRADACIÓN LR")
     logger.info("=" * 60)
     for k, v in vars(args).items():
         logger.info(f"  {k}: {v}")
@@ -152,31 +134,30 @@ def main() -> None:
         p for p in args.input_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXTS
     )
     if not image_paths:
-        logger.error(f"No se encontraron imágenes en {args.input_dir}.")
+        logger.error(f"no hay imágenes en {args.input_dir}")
         sys.exit(1)
 
-    logger.info(f"Imágenes HR: {len(image_paths)} | Escala: x{args.scale} | Degradación: {args.degradation}")
+    logger.info(f"imágenes hr: {len(image_paths)} | escala: x{args.scale} | modo: {args.degradation}")
     processed, skipped = 0, 0
 
-    for img_path in tqdm(image_paths, desc="Degradando", unit="img"):
+    for img_path in tqdm(image_paths, desc="degradando", unit="img"):
         img = cv2.imread(str(img_path), cv2.IMREAD_UNCHANGED)
         if img is None:
-            logger.warning(f"No se pudo leer: {img_path}. Se omite.")
+            logger.warning(f"no se pudo leer: {img_path}")
             skipped += 1
             continue
         try:
             lr = degrade_image(img, args.scale, args.degradation, args.noise_sigma, args.blur_kernel)
-            stem = img_path.stem
-            ext = img_path.suffix
-            out_path = args.output_dir / f"{stem}_x{args.scale}{ext}"
+            # el nombre incluye el factor de escala para identificarlo después
+            out_path = args.output_dir / f"{img_path.stem}_x{args.scale}{img_path.suffix}"
             cv2.imwrite(str(out_path), lr)
             processed += 1
-            logger.debug(f"  Guardado: {out_path} ({lr.shape[1]}x{lr.shape[0]})")
+            logger.debug(f"  guardado: {out_path} ({lr.shape[1]}x{lr.shape[0]})")
         except Exception as e:
-            logger.warning(f"Error degradando {img_path.name}: {e}. Se omite.")
+            logger.warning(f"error en {img_path.name}: {e}")
             skipped += 1
 
-    logger.info(f"Completado: {processed} degradadas, {skipped} omitidas.")
+    logger.info(f"listo: {processed} degradadas, {skipped} omitidas")
 
 
 if __name__ == "__main__":

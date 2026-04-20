@@ -1,17 +1,15 @@
 """
-04_train_stablesr.py — Finetuning de StableSR sobre dataset citogenético.
+train_stablesr.py — finetuning de stablesr sobre el dataset citogenético.
 
-StableSR está basado en Stable Diffusion con un módulo de restauración;
-este script implementa el finetuning con soporte de fp16, gradient
-checkpointing, freeze UNet y gradient accumulation para caber en 8 GB VRAM.
+basado en stable diffusion + módulo de restauración.
+soporta fp16, gradient checkpointing y gradient accumulation para 8 gb vram.
 
-Ref. oficial: https://github.com/IceClear/StableSR
+ref: https://github.com/IceClear/StableSR
 
-El script puede recibir configuración desde un YAML (--config) y los
-argumentos CLI tienen precedencia sobre el yaml para facilitar overrides.
+los parámetros del yaml son la base; los argumentos cli tienen precedencia.
 
-Uso:
-    python scripts/04_train_stablesr.py \
+uso:
+    python scripts/train_stablesr.py \
         --config configs/stablesr_default.yaml \
         --hr_dir data/processed \
         --lr_dir data/lr/x2 \
@@ -30,10 +28,6 @@ import numpy as np
 import yaml
 from tqdm import tqdm
 
-
-# ---------------------------------------------------------------------------
-# Utilidades
-# ---------------------------------------------------------------------------
 
 def setup_logging(log_path: Path, level: str = "INFO") -> logging.Logger:
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -66,16 +60,12 @@ def check_cuda() -> "torch.device":
     if torch.cuda.is_available():
         name = torch.cuda.get_device_name(0)
         vram = torch.cuda.get_device_properties(0).total_memory / 1024**3
-        logging.info(f"CUDA disponible: {name} | VRAM: {vram:.1f} GB")
+        logging.info(f"cuda: {name} | vram: {vram:.1f} gb")
         return torch.device("cuda")
     else:
-        logging.warning("CUDA NO disponible — se usará CPU (MUY LENTO para StableSR).")
+        logging.warning("sin cuda — muy lento para stablesr")
         return torch.device("cpu")
 
-
-# ---------------------------------------------------------------------------
-# Carga de configuración
-# ---------------------------------------------------------------------------
 
 def load_yaml_config(path: Path) -> dict:
     with path.open("r", encoding="utf-8") as f:
@@ -83,22 +73,18 @@ def load_yaml_config(path: Path) -> dict:
 
 
 def merge_config(yaml_cfg: dict, args: argparse.Namespace) -> argparse.Namespace:
-    """Los valores CLI (no-None) tienen precedencia sobre yaml."""
+    # cli tiene prioridad; solo rellena lo que no fue pasado por argumento
     for k, v in yaml_cfg.items():
         if hasattr(args, k) and getattr(args, k) is None:
             setattr(args, k, v)
     return args
 
 
-# ---------------------------------------------------------------------------
-# Dataset HR/LR
-# ---------------------------------------------------------------------------
-
 SUPPORTED_EXTS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
 
 
 def find_lr_counterpart(hr_path: Path, lr_dir: Path, scale: int) -> Path | None:
-    """Busca la imagen LR correspondiente (nombre HR + _xN extensión)."""
+    # busca el par lr por nombre (con o sin sufijo _xN)
     candidates = [
         lr_dir / f"{hr_path.stem}_x{scale}{hr_path.suffix}",
         lr_dir / hr_path.name,
@@ -118,23 +104,14 @@ def build_dataset_pairs(hr_dir: Path, lr_dir: Path, scale: int) -> list[tuple[Pa
         if lr_path is not None:
             pairs.append((hr_path, lr_path))
         else:
-            logging.warning(f"  Sin contraparte LR para: {hr_path.name}")
+            logging.warning(f"  sin lr para: {hr_path.name}")
     return pairs
 
 
-# ---------------------------------------------------------------------------
-# Modelo StableSR
-# ---------------------------------------------------------------------------
-
 def build_stablesr_model(args: argparse.Namespace, device: "torch.device"):
     """
-    Carga el modelo StableSR.
-
-    StableSR requiere los pesos preentrenados de Stable Diffusion v2.1
-    y el módulo de restauración de https://github.com/IceClear/StableSR.
-
-    Si --pretrained apunta a un checkpoint local se carga directamente;
-    si no se descarga con diffusers (modelo base).
+    carga el pipeline stable diffusion y aplica los ajustes de stablesr:
+    freeze unet, gradient checkpointing y xformers si están disponibles.
     """
     import torch
     from diffusers import StableDiffusionPipeline
@@ -142,7 +119,7 @@ def build_stablesr_model(args: argparse.Namespace, device: "torch.device"):
     logger = logging.getLogger(__name__)
 
     pretrained = args.pretrained or "stabilityai/stable-diffusion-2-1-base"
-    logger.info(f"Cargando modelo base desde: {pretrained}")
+    logger.info(f"cargando modelo base: {pretrained}")
 
     try:
         pipe = StableDiffusionPipeline.from_pretrained(
@@ -155,24 +132,23 @@ def build_stablesr_model(args: argparse.Namespace, device: "torch.device"):
         text_encoder = pipe.text_encoder.to(device)
         noise_scheduler = pipe.scheduler
 
-        # Congelar UNet si se solicita
         if args.freeze_unet:
-            logger.info("UNet congelado (solo se finetunan capas de restauración).")
+            logger.info("unet congelado, solo se entrenan capas de restauración")
             for param in unet.parameters():
                 param.requires_grad = False
         else:
-            logger.info("Finetuning completo (UNet descongelado).")
+            logger.info("finetuning completo del unet")
 
         if args.gradient_checkpointing:
             unet.enable_gradient_checkpointing()
-            logger.info("Gradient checkpointing activado.")
+            logger.info("gradient checkpointing activo")
 
         if args.use_xformers:
             try:
                 unet.enable_xformers_memory_efficient_attention()
-                logger.info("xFormers activado.")
+                logger.info("xformers activo")
             except Exception as e:
-                logger.warning(f"xFormers no disponible: {e}")
+                logger.warning(f"xformers no disponible: {e}")
 
         return {
             "unet": unet,
@@ -181,16 +157,9 @@ def build_stablesr_model(args: argparse.Namespace, device: "torch.device"):
             "scheduler": noise_scheduler,
         }
     except Exception as e:
-        logger.error(f"Error cargando modelo: {e}")
-        logger.error(
-            "Asegúrate de tener el checkpoint StableSR en --pretrained o conexión a HuggingFace."
-        )
+        logger.error(f"error cargando modelo: {e}")
         raise
 
-
-# ---------------------------------------------------------------------------
-# Pérdida
-# ---------------------------------------------------------------------------
 
 def compute_loss(pred, target, loss_type: str, lpips_fn=None):
     import torch
@@ -210,10 +179,6 @@ def compute_loss(pred, target, loss_type: str, lpips_fn=None):
         return F.l1_loss(pred, target)
 
 
-# ---------------------------------------------------------------------------
-# Loop de entrenamiento
-# ---------------------------------------------------------------------------
-
 def train(args: argparse.Namespace, pairs: list[tuple[Path, Path]], device: "torch.device") -> None:
     import torch
     import torch.optim as optim
@@ -231,22 +196,20 @@ def train(args: argparse.Namespace, pairs: list[tuple[Path, Path]], device: "tor
     vae = model_parts["vae"]
     scheduler = model_parts["scheduler"]
 
-    # Optimizador (solo parámetros entrenables)
+    # solo se optimizan los parámetros con grad
     trainable_params = [p for p in unet.parameters() if p.requires_grad]
     optimizer = optim.AdamW(trainable_params, lr=args.lr)
 
-    # LPIPS
     lpips_fn = None
     if "lpips" in args.loss_type:
         try:
             import lpips as lpips_lib
             lpips_fn = lpips_lib.LPIPS(net="vgg").to(device)
-            logger.info("LPIPS cargado.")
+            logger.info("lpips cargado")
         except ImportError:
-            logger.warning("lpips no instalado; se usará solo L1.")
+            logger.warning("lpips no instalado, se usará solo l1")
             args.loss_type = "l1"
 
-    # Transformaciones de imagen
     to_tensor = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize([0.5], [0.5]),
@@ -255,21 +218,19 @@ def train(args: argparse.Namespace, pairs: list[tuple[Path, Path]], device: "tor
     use_amp = args.mixed_precision == "fp16"
     scaler = torch.cuda.amp.GradScaler() if use_amp else None
 
-    # CSV log
     csv_path = out_dir / "train_log.csv"
     with csv_path.open("w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["epoch", "loss"])
+        csv.writer(f).writerow(["epoch", "loss"])
 
     best_loss = float("inf")
 
-    for epoch in tqdm(range(1, args.epochs + 1), desc="Épocas", unit="epoch"):
+    for epoch in tqdm(range(1, args.epochs + 1), desc="épocas", unit="epoch"):
         unet.train()
         epoch_loss = 0.0
         optimizer.zero_grad()
 
         for step_idx, (hr_path, lr_path) in enumerate(
-            tqdm(pairs, desc=f"Epoch {epoch}", leave=False, unit="img")
+            tqdm(pairs, desc=f"epoch {epoch}", leave=False, unit="img")
         ):
             try:
                 hr_img = Image.open(hr_path).convert("RGB")
@@ -279,20 +240,18 @@ def train(args: argparse.Namespace, pairs: list[tuple[Path, Path]], device: "tor
                      hr_img.height), Image.LANCZOS
                 )
             except Exception as e:
-                logger.warning(f"  Error leyendo par {hr_path.name}/{lr_path.name}: {e}")
+                logger.warning(f"  error leyendo par {hr_path.name}: {e}")
                 continue
 
             hr_tensor = to_tensor(hr_img).unsqueeze(0).to(device)
             lr_tensor = to_tensor(lr_img).unsqueeze(0).to(device)
 
             with torch.cuda.amp.autocast(enabled=use_amp):
-                # Encode HR → latent space
+                # encode → añadir ruido → predecir ruido con unet
                 latents = vae.encode(hr_tensor).latent_dist.sample() * 0.18215
-                # Add noise
                 noise = torch.randn_like(latents)
                 timesteps = torch.randint(0, scheduler.config.num_train_timesteps, (1,), device=device).long()
                 noisy_latents = scheduler.add_noise(latents, noise, timesteps)
-                # UNet prediction
                 pred = unet(noisy_latents, timesteps, encoder_hidden_states=None).sample
                 loss = compute_loss(pred, noise, args.loss_type, lpips_fn) / args.accum_steps
 
@@ -303,7 +262,7 @@ def train(args: argparse.Namespace, pairs: list[tuple[Path, Path]], device: "tor
 
             epoch_loss += loss.item() * args.accum_steps
 
-            # Gradient accumulation step
+            # actualización cada accum_steps pasos
             if (step_idx + 1) % args.accum_steps == 0:
                 if use_amp and scaler is not None:
                     scaler.step(optimizer)
@@ -313,33 +272,28 @@ def train(args: argparse.Namespace, pairs: list[tuple[Path, Path]], device: "tor
                 optimizer.zero_grad()
 
         avg_loss = epoch_loss / max(len(pairs), 1)
-        logger.info(f"  Época {epoch}/{args.epochs} | Loss={avg_loss:.6f}")
+        logger.info(f"  época {epoch}/{args.epochs} | loss={avg_loss:.6f}")
 
         with csv_path.open("a", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow([epoch, avg_loss])
+            csv.writer(f).writerow([epoch, avg_loss])
 
-        # Guardar últimos y mejor checkpoint
+        # guarda siempre el último y solo sobrescribe best si mejora
         torch.save({"epoch": epoch, "unet": unet.state_dict(), "loss": avg_loss},
                    ckpt_dir / "last.ckpt")
         if avg_loss < best_loss:
             best_loss = avg_loss
             torch.save({"epoch": epoch, "unet": unet.state_dict(), "loss": avg_loss},
                        ckpt_dir / "best.ckpt")
-            logger.info(f"  ✓ Mejor checkpoint guardado (epoch {epoch}, loss={avg_loss:.6f})")
+            logger.info(f"  mejor checkpoint guardado (epoch {epoch}, loss={avg_loss:.6f})")
 
-    logger.info(f"Entrenamiento completado. Checkpoints en: {ckpt_dir}")
+    logger.info(f"entrenamiento listo. checkpoints en: {ckpt_dir}")
 
-
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Finetuning StableSR sobre dataset citogenético."
+        description="finetuning stablesr sobre dataset citogenético."
     )
-    parser.add_argument("--config", type=Path, default=None, help="Ruta al YAML de configuración.")
+    parser.add_argument("--config", type=Path, default=None)
     parser.add_argument("--hr_dir", type=Path, default=None)
     parser.add_argument("--lr_dir", type=Path, default=None)
     parser.add_argument("--scale", type=int, default=None, choices=[2, 3, 4])
@@ -361,10 +315,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--log_level", default="INFO")
     return parser.parse_args()
 
-
-# ---------------------------------------------------------------------------
-# Defaults
-# ---------------------------------------------------------------------------
 
 DEFAULTS = {
     "scale": 2,
@@ -392,19 +342,14 @@ def apply_defaults(args: argparse.Namespace) -> argparse.Namespace:
     return args
 
 
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-
 def main() -> None:
     args = parse_args()
 
-    # 1. Cargar YAML si existe
+    # cargar yaml si se pasa
     if args.config is not None and args.config.exists():
         yaml_cfg = load_yaml_config(args.config)
         args = merge_config(yaml_cfg, args)
 
-    # 2. Aplicar defaults
     args = apply_defaults(args)
 
     log_file = Path("results/logs") / f"{args.exp_name}.log"
@@ -413,7 +358,7 @@ def main() -> None:
 
     logger = logging.getLogger(__name__)
     logger.info("=" * 60)
-    logger.info("SCRIPT 04 — FINETUNING STABLESR")
+    logger.info("FINETUNING STABLESR")
     logger.info("=" * 60)
     for k, v in vars(args).items():
         logger.info(f"  {k}: {v}")
@@ -421,9 +366,8 @@ def main() -> None:
 
     device = check_cuda()
 
-    # Validar directorios
     if args.hr_dir is None or args.lr_dir is None:
-        logger.error("--hr_dir y --lr_dir son obligatorios.")
+        logger.error("--hr_dir y --lr_dir son obligatorios")
         sys.exit(1)
 
     args.hr_dir = Path(args.hr_dir)
@@ -431,10 +375,10 @@ def main() -> None:
 
     pairs = build_dataset_pairs(args.hr_dir, args.lr_dir, args.scale)
     if not pairs:
-        logger.error("No se encontraron pares HR/LR. Verifica los directorios.")
+        logger.error("no se encontraron pares hr/lr")
         sys.exit(1)
 
-    logger.info(f"Pares HR/LR encontrados: {len(pairs)}")
+    logger.info(f"pares hr/lr: {len(pairs)}")
     train(args, pairs, device)
 
 

@@ -1,14 +1,12 @@
 """
-01_augment.py — Data augmentation consistente (imagen + bounding boxes YOLO).
+augment.py — data augmentation con albumentations, sincroniza imagen y bboxes yolo.
 
-Librería: Albumentations (soporta bbox transforms nativo).
-
-Uso:
-    python scripts/01_augment.py \
+uso:
+    python scripts/augment.py \
         --input_dir data/processed \
-        --annot_dir data/annotations \
+        --annot_dir data/raw/labels \
         --output_dir data/augmented/images \
-        --output_annot data/augmented/annotations \
+        --output_annot data/augmented/labels \
         --factor 3 \
         --seed 42
 """
@@ -27,14 +25,11 @@ try:
     import albumentations as A
     from albumentations.core.composition import Compose
 except ImportError:
-    print("ERROR: albumentations no está instalado. Ejecuta: pip install albumentations")
+    print("instala albumentations: pip install albumentations")
     sys.exit(1)
 
 
-# ---------------------------------------------------------------------------
-# Utilidades
-# ---------------------------------------------------------------------------
-
+# setup estándar de logging
 def setup_logging(log_path: Path, level: str = "INFO") -> logging.Logger:
     log_path.parent.mkdir(parents=True, exist_ok=True)
     fmt = "%(asctime)s [%(levelname)s] %(message)s"
@@ -58,9 +53,9 @@ def check_cuda() -> None:
     try:
         import torch
         if torch.cuda.is_available():
-            logging.info(f"CUDA disponible: {torch.cuda.get_device_name(0)}")
+            logging.info(f"cuda: {torch.cuda.get_device_name(0)}")
         else:
-            logging.warning("CUDA NO disponible.")
+            logging.warning("sin cuda")
     except ImportError:
         pass
 
@@ -68,12 +63,8 @@ def check_cuda() -> None:
 SUPPORTED_EXTS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
 
 
-# ---------------------------------------------------------------------------
-# Formato YOLO  →  [class_id, cx, cy, w, h]  (normalizadas [0,1])
-# ---------------------------------------------------------------------------
-
+# formato yolo: [class_id, cx, cy, w, h] normalizados en [0,1]
 def load_yolo_annotations(annot_path: Path) -> list[list[float]]:
-    """Devuelve lista de [class_id, cx, cy, w, h]."""
     if not annot_path.exists():
         return []
     boxes = []
@@ -94,7 +85,7 @@ def save_yolo_annotations(boxes: list, path: Path) -> None:
 
 
 def yolo_to_albumentation(boxes: list) -> tuple[list, list]:
-    """Convierte YOLO [cls, cx, cy, w, h] → albumentations [x_min, y_min, x_max, y_max]."""
+    # convierte de [cx,cy,w,h] a [x_min,y_min,x_max,y_max]
     alb_boxes, class_ids = [], []
     for b in boxes:
         cls, cx, cy, bw, bh = b
@@ -108,7 +99,7 @@ def yolo_to_albumentation(boxes: list) -> tuple[list, list]:
 
 
 def albumentation_to_yolo(alb_boxes: list, class_ids: list) -> list:
-    """Convierte albumentations → YOLO."""
+    # convierte de vuelta a formato yolo
     yolo_boxes = []
     for (x_min, y_min, x_max, y_max), cls in zip(alb_boxes, class_ids):
         cx = (x_min + x_max) / 2
@@ -119,20 +110,16 @@ def albumentation_to_yolo(alb_boxes: list, class_ids: list) -> list:
     return yolo_boxes
 
 
-# ---------------------------------------------------------------------------
-# Pipeline de augmentación
-# ---------------------------------------------------------------------------
-
 def build_transform(seed: int) -> Compose:
+    # mezcla de transformaciones geométricas y fotométricas
     return A.Compose(
         [
-            # Geométricas (reversibles con bbox)
             A.Rotate(limit=15, p=0.7),
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.3),
-            A.RandomScale(scale_limit=0.15, p=0.5),           # zoom ±15%
+            A.RandomScale(scale_limit=0.15, p=0.5),
             A.ShiftScaleRotate(shift_limit=0.05, scale_limit=0, rotate_limit=0, p=0.4),
-            # Fotométricas (no afectan bboxes)
+            # fotométricas: no afectan bboxes
             A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.6),
             A.GaussNoise(var_limit=(0, 25), p=0.5),
             A.GaussianBlur(blur_limit=3, p=0.3),
@@ -146,29 +133,20 @@ def build_transform(seed: int) -> Compose:
     )
 
 
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Data augmentation consistente para imágenes citogenéticas + anotaciones YOLO."
+        description="augmentation de imágenes citogenéticas con anotaciones yolo."
     )
     parser.add_argument("--input_dir", type=Path, required=True)
     parser.add_argument("--annot_dir", type=Path, required=True)
     parser.add_argument("--output_dir", type=Path, required=True)
     parser.add_argument("--output_annot", type=Path, required=True)
-    parser.add_argument("--factor", type=int, default=3, choices=[2, 3, 4, 5],
-                        help="Multiplicador del dataset.")
+    parser.add_argument("--factor", type=int, default=3, choices=[2, 3, 4, 5])
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--log_level", default="INFO")
     parser.add_argument("--exp_name", default="augment")
     return parser.parse_args()
 
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 def main() -> None:
     args = parse_args()
@@ -179,7 +157,7 @@ def main() -> None:
 
     logger = logging.getLogger(__name__)
     logger.info("=" * 60)
-    logger.info("SCRIPT 01 — DATA AUGMENTATION")
+    logger.info("AUGMENTATION")
     logger.info("=" * 60)
     for k, v in vars(args).items():
         logger.info(f"  {k}: {v}")
@@ -192,19 +170,19 @@ def main() -> None:
         p for p in args.input_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXTS
     )
     if not image_paths:
-        logger.error(f"No se encontraron imágenes en {args.input_dir}.")
+        logger.error(f"no hay imágenes en {args.input_dir}")
         sys.exit(1)
 
-    logger.info(f"Imágenes originales: {len(image_paths)} | Factor: x{args.factor}")
+    logger.info(f"originales: {len(image_paths)} | factor: x{args.factor}")
     total_aug = 0
 
-    for img_path in tqdm(image_paths, desc="Augmentando", unit="img"):
+    for img_path in tqdm(image_paths, desc="augmentando", unit="img"):
         img = cv2.imread(str(img_path), cv2.IMREAD_UNCHANGED)
         if img is None:
-            logger.warning(f"No se pudo leer: {img_path}. Se omite.")
+            logger.warning(f"no se pudo leer: {img_path}")
             continue
 
-        # Convertir a RGB si es necesario para Albumentations
+        # albumentations espera rgb
         if len(img.shape) == 2:
             img_rgb = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
         elif img.shape[2] == 3:
@@ -217,11 +195,12 @@ def main() -> None:
         alb_boxes, class_ids = yolo_to_albumentation(yolo_boxes)
 
         for aug_idx in range(1, args.factor):
+            # semilla distinta por variante para reproducibilidad
             transform = build_transform(args.seed + aug_idx * 137)
             try:
                 result = transform(image=img_rgb, bboxes=alb_boxes, class_labels=class_ids)
             except Exception as e:
-                logger.warning(f"Error augmentando {img_path.name} aug{aug_idx}: {e}")
+                logger.warning(f"error aug{aug_idx} en {img_path.name}: {e}")
                 continue
 
             aug_img = result["image"]
@@ -234,7 +213,6 @@ def main() -> None:
             out_img_path = args.output_dir / f"{stem}_aug{aug_idx}{ext}"
             out_ann_path = args.output_annot / f"{stem}_aug{aug_idx}.txt"
 
-            # Guardar imagen
             if len(img.shape) == 2:
                 save_img = cv2.cvtColor(aug_img, cv2.COLOR_RGB2GRAY)
             else:
@@ -243,7 +221,7 @@ def main() -> None:
             save_yolo_annotations(aug_boxes_yolo, out_ann_path)
             total_aug += 1
 
-    logger.info(f"Augmentación completa: {total_aug} imágenes nuevas generadas.")
+    logger.info(f"listo: {total_aug} imágenes nuevas generadas")
 
 
 if __name__ == "__main__":

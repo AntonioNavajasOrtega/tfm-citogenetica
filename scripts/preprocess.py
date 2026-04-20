@@ -1,12 +1,11 @@
 """
-00_preprocess.py — Preprocesamiento de imágenes citogenéticas raw.
+preprocess.py — preprocesa imágenes citogenéticas raw antes del pipeline.
 
-Uso:
-    python scripts/00_preprocess.py \
-        --input_dir data/raw \
+uso:
+    python scripts/preprocess.py \
+        --input_dir data/raw/unmarked \
         --output_dir data/processed \
         --target_size 512 \
-        --convert_gray \
         --seed 42
 """
 
@@ -22,10 +21,7 @@ from PIL import Image
 from tqdm import tqdm
 
 
-# ---------------------------------------------------------------------------
-# Utilidades de logging
-# ---------------------------------------------------------------------------
-
+# logging básico a fichero y consola
 def setup_logging(log_path: Path, level: str = "INFO") -> logging.Logger:
     log_path.parent.mkdir(parents=True, exist_ok=True)
     fmt = "%(asctime)s [%(levelname)s] %(message)s"
@@ -46,28 +42,25 @@ def fix_seed(seed: int) -> None:
 
 
 def check_cuda() -> None:
+    # solo informativo, no es crítico aquí
     try:
         import torch
         if torch.cuda.is_available():
-            logging.info(f"CUDA disponible: {torch.cuda.get_device_name(0)}")
+            logging.info(f"cuda: {torch.cuda.get_device_name(0)}")
         else:
-            logging.warning("CUDA NO disponible — se usará CPU.")
+            logging.warning("sin cuda, se usa cpu")
     except ImportError:
-        logging.warning("PyTorch no instalado; no se puede verificar CUDA.")
+        logging.warning("pytorch no instalado")
 
-
-# ---------------------------------------------------------------------------
-# Lógica de preprocesamiento
-# ---------------------------------------------------------------------------
 
 SUPPORTED_EXTS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
 
 
 def load_image(path: Path) -> np.ndarray | None:
-    """Carga imagen con OpenCV; devuelve None si falla."""
+    # devuelve None si opencv no puede leerlo
     img = cv2.imread(str(path), cv2.IMREAD_UNCHANGED)
     if img is None:
-        logging.warning(f"No se pudo leer: {path}. Se omite.")
+        logging.warning(f"no se pudo leer: {path}")
     return img
 
 
@@ -80,15 +73,12 @@ def to_grayscale(img: np.ndarray) -> np.ndarray:
 
 
 def resize_image(img: np.ndarray, target_size: int) -> np.ndarray:
+    # lanczos da mejor calidad que bilineal para downscaling
     return cv2.resize(img, (target_size, target_size), interpolation=cv2.INTER_LANCZOS4)
 
 
 def remove_circular_artifacts(img: np.ndarray) -> np.ndarray:
-    """
-    Detecta artefactos circulares con HoughCircles y los elimina con
-    apertura morfológica en las regiones detectadas.
-    También aplica una apertura morfológica global ligera.
-    """
+    # detecta círculos con hough y los suaviza con apertura morfológica
     gray = img if len(img.shape) == 2 else cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (9, 9), 2)
 
@@ -110,14 +100,17 @@ def remove_circular_artifacts(img: np.ndarray) -> np.ndarray:
         for c in circles[0]:
             cv2.circle(mask, (c[0], c[1]), c[2], 255, -1)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-        opened = cv2.morphologyEx(result if len(result.shape) == 2 else cv2.cvtColor(result, cv2.COLOR_BGR2GRAY), cv2.MORPH_OPEN, kernel)
+        opened = cv2.morphologyEx(
+            result if len(result.shape) == 2 else cv2.cvtColor(result, cv2.COLOR_BGR2GRAY),
+            cv2.MORPH_OPEN, kernel
+        )
         if len(result.shape) == 2:
             result[mask == 255] = opened[mask == 255]
         else:
             result[:, :, 0][mask == 255] = opened[mask == 255]
-        logging.debug(f"  Círculos detectados: {circles.shape[1]}")
+        logging.debug(f"  círculos detectados: {circles.shape[1]}")
 
-    # Apertura morfológica global ligera
+    # apertura global ligera para quitar ruido puntual
     kernel_global = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
     if len(result.shape) == 2:
         result = cv2.morphologyEx(result, cv2.MORPH_OPEN, kernel_global)
@@ -144,32 +137,24 @@ def save_image(img: np.ndarray, path: Path) -> None:
     cv2.imwrite(str(path), img)
 
 
-# ---------------------------------------------------------------------------
-# CLI
-# ---------------------------------------------------------------------------
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Preprocesamiento de imágenes citogenéticas raw."
+        description="preprocesamiento de imágenes citogenéticas."
     )
-    parser.add_argument("--input_dir", type=Path, required=True, help="Directorio con imágenes raw.")
-    parser.add_argument("--output_dir", type=Path, required=True, help="Directorio de salida.")
+    parser.add_argument("--input_dir", type=Path, required=True)
+    parser.add_argument("--output_dir", type=Path, required=True)
     parser.add_argument(
         "--target_size",
         default="512",
-        help="Resolución de trabajo en píxeles (int) o 'keep' para mantener original.",
+        help="resolución destino en píxeles o 'keep' para no redimensionar",
     )
-    parser.add_argument("--convert_gray", action="store_true", help="Convertir a escala de grises.")
-    parser.add_argument("--remove_artifacts", action="store_true", help="Suprimir artefactos circulares.")
+    parser.add_argument("--convert_gray", action="store_true")
+    parser.add_argument("--remove_artifacts", action="store_true")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--log_level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"])
     parser.add_argument("--exp_name", default="preprocess")
     return parser.parse_args()
 
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 def main() -> None:
     args = parse_args()
@@ -179,7 +164,7 @@ def main() -> None:
     check_cuda()
 
     logger.info("=" * 60)
-    logger.info("SCRIPT 00 — PREPROCESAMIENTO")
+    logger.info("PREPROCESAMIENTO")
     logger.info("=" * 60)
     for k, v in vars(args).items():
         logger.info(f"  {k}: {v}")
@@ -197,13 +182,13 @@ def main() -> None:
         p for p in input_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXTS
     )
     if not image_paths:
-        logger.error(f"No se encontraron imágenes en {input_dir}. Saliendo.")
+        logger.error(f"no hay imágenes en {input_dir}")
         sys.exit(1)
 
-    logger.info(f"Imágenes encontradas: {len(image_paths)}")
+    logger.info(f"imágenes encontradas: {len(image_paths)}")
     processed, skipped = 0, 0
 
-    for img_path in tqdm(image_paths, desc="Preprocesando", unit="img"):
+    for img_path in tqdm(image_paths, desc="preprocesando", unit="img"):
         img = load_image(img_path)
         if img is None:
             skipped += 1
@@ -213,12 +198,12 @@ def main() -> None:
             out_path = output_dir / img_path.name
             save_image(img_out, out_path)
             processed += 1
-            logger.debug(f"  Guardado: {out_path}")
+            logger.debug(f"  guardado: {out_path}")
         except Exception as e:
-            logger.warning(f"Error procesando {img_path.name}: {e}. Se omite.")
+            logger.warning(f"error en {img_path.name}: {e}")
             skipped += 1
 
-    logger.info(f"Completado: {processed} procesadas, {skipped} omitidas.")
+    logger.info(f"listo: {processed} procesadas, {skipped} omitidas")
 
 
 if __name__ == "__main__":
