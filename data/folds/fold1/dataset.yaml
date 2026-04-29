@@ -1,0 +1,5 @@
+path: C:\TFM\data\folds\fold1
+train: train/images
+val: val/images
+nc: 2
+names: ['chromosome', 'dicentric']

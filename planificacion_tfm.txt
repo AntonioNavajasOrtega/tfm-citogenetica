@@ -1,515 +1,269 @@
-================================================================================
-  GUÍA DE PLANIFICACIÓN TÉCNICA — TFM
-  Super-Resolución de Imágenes Citogenéticas con Modelos de Difusión + YOLOv11
-================================================================================
-
-Hardware objetivo: NVIDIA RTX 5060 (8 GB VRAM)
-Lenguaje: Python 3.10
-Entorno: Anaconda + VS Code
-
-================================================================================
-1. ESTRUCTURA DE DIRECTORIOS DEL PROYECTO
-================================================================================
-
-tfm/
-├── data/
-│   ├── raw/                    # 50 imágenes originales (sin tocar nunca)
-│   ├── processed/              # Imágenes tras preprocesamiento
-│   ├── lr/                     # Imágenes degradadas (low-resolution simulada)
-│   │   ├── x2/
-│   │   ├── x3/
-│   │   └── x4/
-│   ├── sr/                     # Salidas de super-resolución
-│   │   ├── x2/
-│   │   ├── x3/
-│   │   └── x4/
-│   └── annotations/            # Etiquetas YOLO (.txt) para cada imagen
-├── scripts/
-│   ├── 00_preprocess.py
-│   ├── 01_augment.py
-│   ├── 02_degrade.py
-│   ├── 03_train_yolo_baseline.py
-│   ├── 04_train_stablesr.py
-│   ├── 05_run_sr.py
-│   ├── 06_evaluate_yolo.py
-│   └── 07_compute_metrics.py
-├── configs/
-│   ├── stablesr_default.yaml
-│   ├── stablesr_exp1.yaml
-│   ├── stablesr_exp2.yaml
-│   └── yolo_dataset.yaml
-├── results/
-│   ├── metrics/                # CSV con PSNR, SSIM, mAP, etc.
-│   └── plots/                  # Gráficas comparativas
-├── models/
-│   ├── yolo_baseline/
-│   └── stablesr_finetuned/
-├── requirements.txt
-└── README.md
-
-
-================================================================================
-2. CONVENCIONES DE DISEÑO DE CÓDIGO
-================================================================================
-
-- Todos los scripts son ejecutables por línea de comandos con argparse.
-- Ningún path, hiperparámetro ni configuración está hardcodeado.
-- Los experimentos se identifican por un nombre (--exp_name) que se usa
-  como prefijo en todos los archivos de salida para trazabilidad.
-- Logs con el módulo logging estándar de Python; nivel configurable.
-- Reproducibilidad: fijar seed en PyTorch, NumPy y random al inicio de
-  cada script (--seed, default=42).
-- Métricas guardadas siempre en CSV (resultados/metrics/<exp_name>.csv)
-  para facilitar comparación posterior.
-
-
-================================================================================
-3. SCRIPT 00 — PREPROCESAMIENTO (00_preprocess.py)
-================================================================================
-
-Propósito: normalizar las 50 imágenes a un formato y tamaño consistente.
-
-Argumentos CLI:
-  --input_dir       Directorio con las imágenes raw
-  --output_dir      Directorio de salida
-  --target_size     Resolución de trabajo en píxeles, p.ej. 512 (cuadrado)
-                    o "keep" para mantener la resolución original
-  --convert_gray    Flag: forzar escala de grises (recomendado, son B&N)
-  --remove_artifacts Flag: aplicar filtro morfológico para suprimir
-                    artefactos circulares (apertura morfológica)
-
-Lógica:
-  1. Leer cada imagen con OpenCV/Pillow.
-  2. Convertir a escala de grises si --convert_gray.
-  3. Redimensionar si --target_size != "keep" (interpolación LANCZOS).
-  4. Normalizar artefactos circulares si --remove_artifacts
-     (detección por HoughCircles + inpainting o apertura morfológica).
-  5. Guardar en --output_dir manteniendo nombre original.
-
-Nota de diseño: conservar las imágenes raw intactas siempre.
-Recomendación: usar target_size=512 o 640 como referencia de trabajo.
-
-
-================================================================================
-4. SCRIPT 01 — DATA AUGMENTATION (01_augment.py)
-================================================================================
-
-Propósito: ampliar el dataset de 50 imágenes para entrenamiento de YOLO.
-Las augmentaciones deben ser CONSISTENTES: aplicarse igual a imagen y a
-su anotación YOLO (.txt con bounding boxes).
-
-Argumentos CLI:
-  --input_dir       Directorio con imágenes procesadas
-  --annot_dir       Directorio con anotaciones .txt YOLO correspondientes
-  --output_dir      Directorio de salida
-  --output_annot    Directorio de salida para anotaciones aumentadas
-  --factor          Multiplicador del dataset: 2, 3 o 5 (default=3)
-  --seed            Semilla aleatoria
-
-Augmentaciones implementadas (geométricas reversibles con bbox):
-  - Rotación aleatoria en [-15, +15] grados
-  - Flip horizontal (con ajuste de coordenadas YOLO)
-  - Flip vertical (con ajuste de coordenadas YOLO)
-  - Zoom aleatorio [0.85, 1.15] con recorte centrado
-  - Traslación aleatoria pequeña [±5% del tamaño]
-
-Augmentaciones fotométricas (no afectan bboxes):
-  - Ajuste de brillo/contraste aleatorio
-  - Adición de ruido gaussiano suave (sigma en [0, 5])
-  - Blur gaussiano ligero (kernel 3x3 con prob. 0.3)
-
-Lógica:
-  Para cada imagen, aplicar (factor-1) transformaciones aleatorias
-  distintas y guardar los pares imagen+anotación resultantes.
-  Nombrar archivos como: <nombre_original>_aug<N>.<ext>
-
-Librería recomendada: Albumentations (soporta bbox transforms nativo).
-
-
-================================================================================
-5. SCRIPT 02 — DEGRADACIÓN LR (02_degrade.py)
-================================================================================
-
-Propósito: crear versiones de baja resolución simulada para entrenar
-y evaluar el modelo de super-resolución.
-
-Argumentos CLI:
-  --input_dir       Directorio con imágenes HR (alta resolución)
-  --output_dir      Directorio de salida
-  --scale           Factor de degradación: 2, 3 o 4 (default=2)
-  --degradation     Tipo: "bicubic" | "bilinear" | "blur_noise"
-                    (blur_noise añade blur gaussiano + ruido antes de
-                    downsample, simula mejor condiciones reales)
-  --noise_sigma     Sigma del ruido gaussiano si degradation=blur_noise
-                    (default=5)
-  --blur_kernel     Tamaño del kernel de blur (default=3)
-
-Lógica:
-  1. Leer imagen HR.
-  2. Aplicar degradación seleccionada.
-  3. Bajar resolución por factor --scale.
-  4. Guardar como LR. El nombre incluye el factor: <nombre>_x<scale>.png
-
-Nota: los pares HR/LR resultantes son los datos de entrenamiento para
-StableSR. Las imágenes HR son las de data/processed/.
-
-
-================================================================================
-6. SCRIPT 03 — BASELINE YOLO (03_train_yolo_baseline.py)
-================================================================================
-
-Propósito: entrenar/evaluar YOLOv11 con validación leave-one-out (LOO)
-sobre las imágenes ORIGINALES (sin SR). Esto es el baseline de detección.
-
-Argumentos CLI:
-  --data_dir        Directorio con imágenes (procesadas o aumentadas)
-  --annot_dir       Directorio con anotaciones YOLO
-  --output_dir      Directorio para guardar modelos y métricas
-  --model_size      Tamaño del modelo YOLO: n, s, m (default=n para RTX5060)
-  --epochs          Número de épocas por fold (default=50)
-  --img_size        Tamaño de imagen de entrada YOLO (default=640)
-  --batch_size      Batch size (default=8; ajustar según VRAM)
-  --loo_n           Nº de imágenes base para leave-one-out (default=10)
-                    Usar subconjunto representativo, no todas las 50.
-  --device          "cuda" | "cpu" (default=cuda)
-  --seed            Semilla
-  --exp_name        Nombre del experimento
-
-Estrategia LOO recomendada:
-  Con 50 imágenes es viable LOO completo pero lento.
-  Opción pragmática para un TFM con RTX5060:
-    - Usar las 50 imágenes raw (sin augmentar) para LOO.
-    - Con augmentation aplicado al train de cada fold (dentro del script).
-    - 50 folds x 50 épocas = pesado. Alternativa: LOO sobre 20 imágenes
-      representativas (--loo_n 20) o K-fold con K=5 o K=10.
-  Recomendación: implementar ambos modos con un flag --cv_mode loo|kfold
-  y --k_folds (default=5).
-
-Lógica por fold:
-  1. Separar 1 imagen (o K%) como test, resto como train.
-  2. Aplicar augmentation al split de train en memoria o en disco.
-  3. Construir dataset YOLO temporal con el split.
-  4. Finetunear YOLOv11 desde pesos preentrenados (COCO) por --epochs.
-  5. Evaluar sobre test: guardar mAP50, mAP50-95, precision, recall, F1.
-  6. Borrar dataset temporal; conservar solo métricas y mejor checkpoint.
-
-Métricas a guardar por fold y promedios globales en CSV.
-
-
-================================================================================
-7. SCRIPT 04 — FINETUNING STABLESR (04_train_stablesr.py)
-================================================================================
-
-Propósito: finetuning del modelo StableSR sobre el dataset citogenético.
-StableSR se basa en Stable Diffusion con controlnet de SR; el finetuning
-es sobre las capas de decodificación y el módulo de restauración.
-
-IMPORTANTE sobre VRAM: StableSR completo requiere ~10-12 GB. Estrategias
-para caber en 8 GB:
-  - Usar gradient checkpointing (--gradient_checkpointing)
-  - Batch size 1 con gradient accumulation (--accum_steps 4-8)
-  - Desactivar xformers si causa problemas, activar si no (--use_xformers)
-  - Precisión mixta fp16 (--mixed_precision fp16)
-  - Congelar el UNet base y solo finetunar el módulo de restauración
-    (--freeze_unet, recomendado para dataset pequeño y VRAM limitada)
-
-Argumentos CLI:
-  --hr_dir          Directorio imágenes HR
-  --lr_dir          Directorio imágenes LR (el script asume mismo nombre)
-  --scale           Factor de escala: 2, 3 o 4
-  --output_dir      Directorio para checkpoints y logs
-  --pretrained      Path o nombre del checkpoint StableSR base
-  --epochs          Épocas de finetuning (default=100; con 50 imágenes basta)
-  --batch_size      default=1 (RTX5060 con fp16)
-  --accum_steps     Gradient accumulation steps (default=4)
-  --lr              Learning rate (default=5e-5)
-  --scheduler       Noise scheduler: "ddpm" | "ddim" (default=ddim)
-  --sampler_steps   Pasos de sampling en inferencia (default=20)
-  --loss_type       "l1" | "l2" | "lpips" | "l1+lpips" (default=l1+lpips)
-  --freeze_unet     Flag: congelar UNet base de Stable Diffusion
-  --gradient_checkpointing  Flag
-  --mixed_precision "fp16" | "bf16" | "no" (default=fp16)
-  --use_xformers    Flag
-  --seed
-  --exp_name
-
-Experimentos previstos (cada uno cambia uno o pocos parámetros):
-  Exp 0 (base):   scheduler=ddim, steps=20, loss=l1+lpips, freeze_unet=True
-  Exp 1:          scheduler=ddpm, steps=50, resto igual
-  Exp 2:          loss=l2, resto de Exp0
-  Exp 3:          freeze_unet=False (finetuning más profundo), lr=1e-5
-  Exp 4:          scale=x4 (más agresivo), resto de Exp0
-  (Máximo 4-5 experimentos para no sobrecargar el TFM)
-
-Guardar en output_dir/<exp_name>/:
-  - checkpoints/last.ckpt, best.ckpt
-  - train_log.csv (pérdida por época)
-
-
-================================================================================
-8. SCRIPT 05 — INFERENCIA SR (05_run_sr.py)
-================================================================================
-
-Propósito: aplicar el modelo StableSR finetuneado sobre las imágenes LR
-para obtener las imágenes con super-resolución.
-
-Argumentos CLI:
-  --lr_dir          Directorio con imágenes LR de entrada
-  --output_dir      Directorio de salida imágenes SR
-  --checkpoint      Path al checkpoint del modelo a usar
-  --scale           Factor de escala (debe coincidir con el del entrenamiento)
-  --sampler_steps   Pasos de denoising (default=20)
-  --mixed_precision "fp16" | "no"
-  --device          "cuda" | "cpu"
-  --exp_name        Para nombrar subcarpeta de salida
-
-Lógica:
-  1. Cargar modelo desde --checkpoint.
-  2. Para cada imagen en --lr_dir, generar imagen SR.
-  3. Guardar en output_dir/<exp_name>/<nombre_original>.png
-
-
-================================================================================
-9. SCRIPT 06 — EVALUACIÓN YOLO POST-SR (06_evaluate_yolo.py)
-================================================================================
-
-Propósito: evaluar el modelo YOLO baseline (o finetuneado en SR) sobre
-imágenes SR para comparar con el baseline sobre imágenes originales.
-
-Argumentos CLI:
-  --sr_dir          Directorio con imágenes SR
-  --annot_dir       Directorio con anotaciones YOLO (las originales sirven
-                    si SR no cambia dimensión; si cambia, reescalar bboxes)
-  --yolo_checkpoint Path al checkpoint YOLO a usar
-  --output_dir      Directorio para resultados
-  --img_size        Tamaño de entrada YOLO (default=640)
-  --conf_threshold  Umbral de confianza (default=0.25)
-  --iou_threshold   Umbral IoU para mAP (default=0.5)
-  --device
-  --exp_name
-
-Nota: si SR amplía la resolución (x2, x4), las anotaciones YOLO en
-coordenadas normalizadas [0,1] siguen siendo válidas sin cambios.
-
-Guardar: mAP50, mAP50-95, precision, recall, F1 en CSV.
-
-
-================================================================================
-10. SCRIPT 07 — MÉTRICAS DE IMAGEN (07_compute_metrics.py)
-================================================================================
-
-Propósito: calcular métricas de calidad de imagen SR vs HR original.
-
-Argumentos CLI:
-  --sr_dir          Directorio imágenes SR
-  --hr_dir          Directorio imágenes HR de referencia
-  --output_csv      Archivo CSV de salida
-  --metrics         Lista: "psnr" "ssim" "lpips" (default: psnr ssim)
-  --exp_name
-
-Lógica:
-  Para cada par SR/HR: calcular PSNR (skimage), SSIM (skimage),
-  LPIPS si se solicita (red VGG preentrenada, requiere GPU).
-  Guardar media, std y valor por imagen en CSV.
-
-
-================================================================================
-11. CONFIGS YAML
-================================================================================
-
-Cada experimento de StableSR tiene su .yaml en configs/.
-Ejemplo configs/stablesr_default.yaml:
-
-  exp_name: stablesr_default
-  scale: 2
-  epochs: 100
-  batch_size: 1
-  accum_steps: 4
-  lr: 5.0e-5
-  scheduler: ddim
-  sampler_steps: 20
-  loss_type: l1+lpips
-  freeze_unet: true
-  gradient_checkpointing: true
-  mixed_precision: fp16
-  use_xformers: true
-  seed: 42
-
-El script 04_train_stablesr.py puede recibir --config ruta/al.yaml
-(argparse lo parsea y los argumentos CLI tienen precedencia sobre yaml
-para facilitar overrides puntuales).
-
-El dataset YOLO (configs/yolo_dataset.yaml) sigue el formato Ultralytics:
-  path: ../data/processed
-  train: train.txt
-  val: val.txt
-  nc: 1                  # una clase: cromosoma
-  names: ['chromosome']
-
-
-================================================================================
-12. REQUIREMENTS.TXT
-================================================================================
-
-torch>=2.2.0
-torchvision>=0.17.0
-ultralytics>=8.1.0        # YOLO11
-albumentations>=1.4.0
-opencv-python>=4.9.0
-Pillow>=10.0.0
-scikit-image>=0.22.0
-scikit-learn>=1.4.0
-numpy>=1.26.0
-matplotlib>=3.8.0
-tqdm>=4.66.0
-pyyaml>=6.0
-lpips>=0.1.4              # métrica perceptual (opcional)
-xformers                  # instalar según versión CUDA exacta
-diffusers>=0.27.0         # para componentes de Stable Diffusion
-transformers>=4.38.0
-accelerate>=0.27.0        # facilita fp16 y gradient checkpointing
-
-
-================================================================================
-13. ORDEN DE EJECUCIÓN RECOMENDADO
-================================================================================
-
-Fase 1 — Setup y datos:
-  python scripts/00_preprocess.py \
-    --input_dir data/raw \
-    --output_dir data/processed \
-    --target_size 512 \
-    --convert_gray
-
-  python scripts/02_degrade.py \
-    --input_dir data/processed \
-    --output_dir data/lr/x2 \
-    --scale 2 \
-    --degradation blur_noise
-
-Fase 2 — Baseline YOLO:
-  python scripts/03_train_yolo_baseline.py \
-    --data_dir data/processed \
-    --annot_dir data/annotations \
-    --output_dir models/yolo_baseline \
-    --model_size n \
-    --cv_mode kfold \
-    --k_folds 5 \
-    --epochs 50 \
-    --exp_name baseline_kfold5
-
-Fase 3 — Finetuning StableSR (repetir por experimento):
-  python scripts/04_train_stablesr.py \
-    --config configs/stablesr_default.yaml \
-    --hr_dir data/processed \
-    --lr_dir data/lr/x2 \
-    --output_dir models/stablesr_finetuned \
-    --exp_name exp0_default
-
-Fase 4 — Inferencia SR:
-  python scripts/05_run_sr.py \
-    --lr_dir data/lr/x2 \
-    --output_dir data/sr/x2 \
-    --checkpoint models/stablesr_finetuned/exp0_default/best.ckpt \
-    --scale 2 \
-    --exp_name exp0_default
-
-Fase 5 — Evaluación:
-  python scripts/07_compute_metrics.py \
-    --sr_dir data/sr/x2/exp0_default \
-    --hr_dir data/processed \
-    --output_csv results/metrics/sr_exp0_default.csv \
-    --exp_name exp0_default
-
-  python scripts/06_evaluate_yolo.py \
-    --sr_dir data/sr/x2/exp0_default \
-    --annot_dir data/annotations \
-    --yolo_checkpoint models/yolo_baseline/best.pt \
-    --output_dir results/metrics \
-    --exp_name yolo_on_sr_exp0
-
-Repetir Fases 3-5 para cada experimento de StableSR.
-
-
-================================================================================
-14. DECISIONES DE DISEÑO JUSTIFICADAS
-================================================================================
-
-Factor de escala: empezar con x2.
-  x4 genera resultados más llamativos pero es más exigente para el modelo
-  y para VRAM. Con 50 imágenes, x2 da más margen de aprendizaje real y
-  los resultados son más interpretables para la memoria del TFM.
-  Añadir x4 como experimento adicional si hay tiempo.
-
-Validación cruzada: K-Fold con K=5 en lugar de LOO completo.
-  LOO sobre 50 imágenes = 50 entrenamientos de YOLO. Con K=5 son solo 5.
-  El tiempo de cómputo en RTX5060 es mucho más manejable y la estimación
-  de rendimiento sigue siendo estadísticamente sólida para un TFM.
-  LOO es válido pero puede costar 10x más tiempo sin aportar conclusiones
-  cualitativamente distintas con este tamaño de dataset.
-
-Data augmentation: factor x3 como default.
-  Pasa de 50 a 150 imágenes de entrenamiento. Es suficiente para YOLO sin
-  riesgo de overfitting artificial excesivo. Factor x5 (250 imágenes) puede
-  evaluarse como variante si el baseline con x3 es muy inestable.
-
-Augmentation: aplicada SOLO al split de entrenamiento de cada fold.
-  El split de validación/test NUNCA se aumenta. Esto es crítico para que
-  las métricas sean representativas del rendimiento real.
-
-Freeze UNet en StableSR: recomendado para este proyecto.
-  Con solo 50 imágenes, hacer full finetuning del UNet de Stable Diffusion
-  puede producir overfitting y colapso del modelo. Congelar el backbone y
-  finetunar solo las capas de restauración es más estable y rápido.
-
-Número de experimentos StableSR: máximo 5.
-  Más experimentos no añaden valor académico proporcional al tiempo de
-  cómputo. Lo clave es que cada experimento cambie UNA sola variable para
-  que las conclusiones sean trazables.
-
-Métricas de imagen: PSNR + SSIM como mínimo.
-  LPIPS es más representativo perceptualmente pero requiere GPU y es más
-  lento. Incluirlo si hay tiempo; si no, PSNR+SSIM es suficiente para el TFM.
-
-YOLO model size: yolo11n (nano).
-  Con imágenes citogenéticas que tienen 1 clase y estructuras bien definidas,
-  el modelo nano es suficiente y entrena mucho más rápido. Si los resultados
-  son pobres, escalar a yolo11s.
-
-
-================================================================================
-15. NOTAS PARA LA GENERACIÓN DE CÓDIGO (ANTIGRAVITY)
-================================================================================
-
-Al pasar esta guía al generador de código, indicar además:
-
-1. Usar argparse con subcomandos opcionales o scripts independientes.
-   Cada script debe poder ejecutarse de forma autónoma.
-
-2. Incluir bloque if __name__ == "__main__" en todos los scripts.
-
-3. Añadir barra de progreso tqdm en todos los bucles de procesamiento
-   de imágenes y épocas de entrenamiento.
-
-4. Logs al fichero results/logs/<exp_name>.log además de consola.
-
-5. Al inicio de cada script, imprimir un resumen de todos los argumentos
-   recibidos para reproducibilidad.
-
-6. Gestión de errores: si una imagen no se puede leer, loguear warning
-   y continuar (no crashear el pipeline completo).
-
-7. Verificar disponibilidad de CUDA al inicio y avisar si no está disponible.
-
-8. Para StableSR: basarse en la implementación de referencia del repo
-   oficial (https://github.com/IceClear/StableSR) y adaptar el script de
-   entrenamiento para aceptar los argumentos CLI descritos aquí.
-
-9. El script 03 debe generar al final un resumen tabular en consola y en
-   CSV con las métricas por fold y la media±std.
-
-10. Usar pathlib.Path en lugar de os.path para manejo de rutas.
-
-================================================================================
-FIN DE LA GUÍA
-================================================================================
+
+El paper original:
+- Usa 50 imágenes de cromosomas de 512x512 píxeles con sus anotaciones YOLO
+- Aplica 17 operadores de preprocesado (binarización Otsu/Spline + filtros morfológicos opening/closing en tamaños 2x2 a 5x5)
+- Entrena un YOLOv8x separado por cada operador
+- Combina predicciones con un ensemble y función de consenso
+- La métrica base es el operador "No operation" (YOLO sobre imágenes originales sin preprocesado)
+
+La CONTRIBUCIÓN DEL TFM es añadir modelos de difusión como operador adicional de mejora de imagen
+y comparar si mejoran el rendimiento de YOLO respecto al "No operation" del paper.
+
+
+## 2. DATASET
+
+- 50 imágenes de cromosomas en metafase, 512x512 píxeles
+- Ya tienen anotaciones en formato YOLO (.txt con bounding boxes)
+- Tarea: detección de cromosomas dicéntricos (bounding boxes)
+- Split: seguir el mismo esquema de k-fold que el paper (5-fold cross validation)
+- Hardware: RTX 5060 8GB local
+
+
+---
+
+## 3. PIPELINE COMPLETO DEL TFG
+
+FASE A — Baseline YOLO (replicar "No operation" del paper):
+  1. Split 5-fold de las 50 imágenes
+  2. Entrenar YOLOv8 (nano o small, no x — dataset muy pequeño) en cada fold
+  3. Evaluar en test: métricas mAP@50 y mAP@50:95
+  4. Estas métricas son el BASELINE comparable al "No operation" del paper
+
+FASE B — Modelos de difusión (contribución propia):
+  1. Aplicar StableSR con distintas configuraciones a las imágenes
+  2. Evaluar calidad de imagen mejorada (BRISQUE, NIQE, SSIM, PSNR)
+  3. Elegir mejor configuración
+  4. Pasar imágenes mejoradas por YOLO (mismo modelo ya entrenado, sin reentrenar)
+  5. Comparar mAP antes vs después → conclusión principal del TFG
+
+NOTA IMPORTANTE: El modelo de difusión NO se reentrena para cada fold de YOLO.
+Se entrena/configura una vez y se aplica como preprocesado al test set.
+
+
+---
+
+## 4. MODELO DE DIFUSIÓN ELEGIDO: StableSR
+
+Paper: "Exploiting Diffusion Prior for Real-World Image Super-Resolution" (IJCV 2024)
+Repositorio: https://github.com/IceClear/StableSR
+
+Por qué StableSR:
+- Diseñado específicamente para super-resolución blind (sin conocer la degradación)
+- No requiere pares imagen degradada/nítida para inferencia básica
+- Tiene módulos entrenables ligeros (no requiere entrenar la UNet completa)
+- Disponible en HuggingFace
+
+
+---
+
+## 5. ARQUITECTURA DE STABLESR (importante para entender qué se puede modificar)
+
+Componentes:
+- UNet de Stable Diffusion → CONGELADA (860M parámetros, no se toca)
+- Time-aware Encoder → ENTRENABLE (recibe imagen degradada, inyecta features en UNet)
+- CFW Module (Controllable Feature Wrapping) → ENTRENABLE (balancea fidelidad vs calidad)
+
+Por qué la UNet está congelada:
+- Fue entrenada con millones de imágenes, contiene el prior de "imagen nítida"
+- Descongelarla con 50 imágenes causaría catastrophic forgetting
+- No cabe en 8GB de VRAM entrenar la UNet completa
+
+El parámetro dec_w controla el CFW en inferencia:
+- dec_w = 0.0 → máxima creatividad (puede inventar detalles)
+- dec_w = 0.5 → equilibrio
+- dec_w = 1.0 → máxima fidelidad al input original
+Para imágenes médicas se recomienda dec_w alto (0.7-1.0) para no inventar estructuras.
+
+
+---
+
+## 6. ESTRUCTURA DE EXPERIMENTOS (ABLATION STUDY)
+
+El profesor pidió explícitamente (correo):
+"comparativa usando algún modelo de difusión preentrenado de Hugging Face,
+comparando planificadores de ruido y técnicas de generación estocásticas vs. deterministas"
+
+Las fases acordadas, cada una responde una pregunta:
+
+FASE 1 — ¿Mejora el fine-tuning?
+  - StableSR sin fine-tuning (inferencia pura con pesos oficiales)
+  - vs StableSR con fine-tuning del Time-aware Encoder + CFW
+  - Dataset de fine-tuning: pares sintéticos (imagen_original, imagen_degradada)
+    generados desde las 40 imágenes de train de cada fold
+
+FASE 2 — ¿Mejora el data augmentation en el fine-tuning?
+  - Fine-tuning sin augmentation
+  - vs fine-tuning con augmentation (flips H/V, rotaciones 90°, variación de brillo)
+  - Augmentations específicas para microscopia: NO usar cambios de color agresivos
+
+FASE 3 — Mejor planificador de ruido
+  - DDIM (determinista)
+  - PNDM
+  - LMSDiscrete
+  Comparar con mismos pasos (50) para aislar efecto del scheduler
+
+FASE 4 — Mejor número de inference steps
+  - 25 / 50 / 100 / 200 pasos
+  - Con el mejor scheduler de la Fase 3
+  - Analizar trade-off calidad vs tiempo de cómputo
+
+FASE 5 — Estocástico vs determinista
+  - DDPM (estocástico, cada run da resultado distinto)
+  - vs DDIM (determinista, misma semilla = mismo resultado)
+  - Relevante para reproducibilidad científica
+
+FASE 6 — Mejor loss function (solo si se hace fine-tuning)
+  - L1 loss
+  - L2 loss (MSE)
+  - Perceptual loss (LPIPS/VGG)
+  Cambiar en: ldm/models/diffusion/ddpm.py función p_losses()
+
+Orden recomendado de ejecución:
+Fase 1 → Fase 2 → Fase 6 → Fase 3 → Fase 4/5
+(primero optimizar el modelo, luego el proceso de sampling)
+
+
+---
+
+## 7. MÉTRICAS
+
+Para evaluar calidad de imagen (modelos de difusión, NO requieren ground truth):
+- BRISQUE: menor = mejor (evalúa artefactos y naturalidad)
+- NIQE: menor = mejor (calidad sin referencia)
+
+Para evaluar calidad de imagen (SI hubiera ground truth):
+- PSNR: mayor = mejor
+- SSIM: mayor = mejor (0-1)
+- LPIPS: menor = mejor (calidad perceptual)
+
+Para evaluar YOLO (métricas principales del TFG):
+- mAP@50: métrica principal de comparación con el paper
+- mAP@50:95: métrica secundaria más estricta
+- Precision y Recall por clase
+
+ADVERTENCIA IMPORTANTE:
+Un modelo que mejora BRISQUE/NIQE puede empeorar mAP de YOLO.
+Esto no es un fracaso — es un resultado válido que indica que las métricas de calidad
+perceptual general no predicen bien el rendimiento en detección de objetos médicos.
+Es una conclusión académica relevante para el TFM.
+
+
+
+## 8. DATASET DE FINE-TUNING PARA STABLESR
+
+Problema: StableSR necesita pares (imagen_degradada, imagen_original) para fine-tuning.
+No tenemos versiones de alta calidad de nuestras imágenes.
+
+Solución: degradación sintética sobre las imágenes originales.
+Las imágenes originales actúan como ground truth.
+Las versiones degradadas sintéticamente son el input.
+
+Código de degradación sintética:
+```python
+from PIL import Image, ImageFilter
+import numpy as np
+
+def degrade_image(img):
+    # Blur gaussiano (simula desenfoque del microscopio)
+    img = img.filter(ImageFilter.GaussianBlur(radius=2))
+    # Ruido gaussiano (simula ruido del sensor)
+    arr = np.array(img).astype(np.float32)
+    noise = np.random.normal(0, 15, arr.shape)
+    arr = np.clip(arr + noise, 0, 255).astype(np.uint8)
+    return Image.fromarray(arr)
+
+# Par de entrenamiento: (degrade_image(img_original), img_original)
+```
+
+Tipo de degradación a usar: bsrgan pipeline (ya implementado en StableSR)
+o degradación manual como la anterior.
+
+
+---
+
+## 9. ENTRENAMIENTO DE STABLESR (fine-tuning)
+
+Etapa 1 — Time-aware Encoder + SFT layers:
+```bash
+python main.py --train \
+    --base configs/stableSRNew/v2-finetune_text_T_512.yaml \
+    --gpus 0, \
+    --name cromosomas_stage1 \
+    --scale_lr False
+```
+
+Etapa 2 — CFW Module:
+```bash
+python main.py --train \
+    --base configs/stableSRNew/v2-finetune_text_T_512_CFW.yaml \
+    --gpus 0, \
+    --name cromosomas_stage2 \
+    --scale_lr False
+```
+
+Ajustes para RTX 5060 8GB en el yaml:
+```yaml
+data:
+  params:
+    batch_size: 1
+model:
+  params:
+    use_fp16: true
+```
+
+Cambiar loss function en: ldm/models/diffusion/ddpm.py función p_losses()
+
+
+---
+
+## 10. ENTRENAMIENTO YOLO
+
+Modelo recomendado: YOLOv8s (small) — no usar yolov8x con 50 imágenes
+
+```python
+from ultralytics import YOLO
+
+model = YOLO('yolov8s.pt')
+results = model.train(
+    data='data.yaml',
+    epochs=100,
+    imgsz=512,
+    batch=16,
+    device=0,
+    augment=True,
+    patience=20,
+    project='runs/chromosomes',
+    name='baseline'
+)
+
+# Evaluar
+metrics = model.val(data='data.yaml', split='test')
+print(metrics.box.map)     # mAP@50
+print(metrics.box.map50)   # mAP@50:95
+```
+
+data.yaml:
+```yaml
+path: /ruta/a/dataset
+train: images/train
+val: images/val
+test: images/test
+nc: 1
+names: ['chromosome']
+```
+
+
+
+## 12. NOTAS CONCEPTUALES IMPORTANTES
+
+- YOLO es discriminativo: aprende a clasificar → necesita fine-tuning, k-fold, labels
+- StableSR es generativo: aprende a transformar → no necesita k-fold, no tiene riesgo
+  de overfitting en inferencia de la misma manera
+
+- K-fold es para YOLO únicamente, no para StableSR
+
+- Data augmentation del fine-tuning de StableSR: flips y rotaciones tienen sentido
+  para microscopia. Cambios de color agresivos NO (imágenes Giemsa tienen colorimetría
+  diagnósticamente relevante, aunque las imágenes sean en escala de grises)
+
+- Con 8GB VRAM: usar batch_size=1, fp16=true, gradient_checkpointing si disponible

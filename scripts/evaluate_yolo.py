@@ -1,29 +1,34 @@
 """
-evaluate_yolo.py — evalúa yolo sobre imágenes sr para comparar con originales.
+evaluate_yolo.py — evalúa un checkpoint yolo sobre cualquier directorio de imágenes.
 
-las anotaciones yolo en coordenadas normalizadas siguen siendo válidas
-aunque la sr amplíe la resolución (las proporciones no cambian).
+sirve para comparar mAP en tres condiciones:
+  - modo 'original': imágenes test sin SR (baseline "no operation")
+  - modo 'sr':       imágenes test con SR aplicada
+  - modo 'custom':   cualquier directorio que se pase
 
 uso:
+    # baseline (no operation)
     python scripts/evaluate_yolo.py \
-        --sr_dir data/sr/x2/exp0_default \
-        --annot_dir data/raw/labels \
-        --yolo_checkpoint models/yolo_baseline/baseline_kfold5_fold1/train/weights/best.pt \
-        --output_dir results/metrics \
-        --exp_name yolo_on_sr_exp0
+        --img_dir data/test/images \
+        --lbl_dir data/test/labels \
+        --checkpoint models/yolo_baseline/best.pt \
+        --exp_name no_operation
+
+    # sobre imágenes sr
+    python scripts/evaluate_yolo.py \
+        --img_dir data/sr/sr_ddim_50 \
+        --lbl_dir data/test/labels \
+        --checkpoint models/yolo_baseline/best.pt \
+        --exp_name sr_ddim_50
 """
 
 import argparse
 import csv
 import logging
-import random
+import shutil
 import sys
 import tempfile
-import shutil
 from pathlib import Path
-
-import numpy as np
-from tqdm import tqdm
 
 try:
     from ultralytics import YOLO
@@ -32,12 +37,14 @@ except ImportError:
     sys.exit(1)
 
 
+SUPPORTED_EXTS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
+
+
 def setup_logging(log_path: Path, level: str = "INFO") -> logging.Logger:
     log_path.parent.mkdir(parents=True, exist_ok=True)
-    fmt = "%(asctime)s [%(levelname)s] %(message)s"
     logging.basicConfig(
         level=getattr(logging, level.upper(), logging.INFO),
-        format=fmt,
+        format="%(asctime)s [%(levelname)s] %(message)s",
         handlers=[
             logging.StreamHandler(sys.stdout),
             logging.FileHandler(log_path, encoding="utf-8"),
@@ -46,136 +53,143 @@ def setup_logging(log_path: Path, level: str = "INFO") -> logging.Logger:
     return logging.getLogger(__name__)
 
 
-def fix_seed(seed: int) -> None:
-    random.seed(seed)
-    np.random.seed(seed)
-
-
-def check_cuda() -> str:
-    try:
-        import torch
-        if torch.cuda.is_available():
-            logging.info(f"cuda: {torch.cuda.get_device_name(0)}")
-            return "cuda"
-        logging.warning("sin cuda")
-        return "cpu"
-    except ImportError:
-        return "cpu"
-
-
-SUPPORTED_EXTS = {".png", ".jpg", ".jpeg", ".tif", ".tiff", ".bmp"}
-
-
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="evaluación de yolo sobre imágenes sr."
-    )
-    parser.add_argument("--sr_dir", type=Path, required=True)
-    parser.add_argument("--annot_dir", type=Path, required=True)
-    parser.add_argument("--yolo_checkpoint", type=Path, required=True)
-    parser.add_argument("--output_dir", type=Path, default=Path("results/metrics"))
-    parser.add_argument("--img_size", type=int, default=640)
-    parser.add_argument("--conf_threshold", type=float, default=0.25)
-    parser.add_argument("--iou_threshold", type=float, default=0.5)
-    parser.add_argument("--device", default="cuda", choices=["cuda", "cpu"])
-    parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--log_level", default="INFO")
-    parser.add_argument("--exp_name", default="yolo_on_sr")
-    return parser.parse_args()
+    p = argparse.ArgumentParser(description="evalúa yolo sobre un directorio de imágenes")
+    p.add_argument("--img_dir",     type=Path, required=True,
+                   help="directorio con imágenes a evaluar")
+    p.add_argument("--lbl_dir",     type=Path, required=True,
+                   help="directorio con etiquetas yolo (.txt)")
+    p.add_argument("--checkpoint",  type=Path, default=Path("models/yolo_baseline/best.pt"),
+                   help="checkpoint yolo a usar")
+    p.add_argument("--img_size",    type=int, default=512)
+    p.add_argument("--device",      default="cuda", choices=["cuda", "cpu"])
+    p.add_argument("--exp_name",    default=None,
+                   help="nombre del experimento para el csv de salida")
+    p.add_argument("--output_dir",  type=Path, default=Path("results/metrics"))
+    p.add_argument("--log_level",   default="INFO")
+    return p.parse_args()
 
 
-def main() -> None:
-    args = parse_args()
-    log_file = Path("results/logs") / f"{args.exp_name}.log"
-    setup_logging(log_file, args.log_level)
-    fix_seed(args.seed)
-    device = check_cuda() if args.device == "cuda" else "cpu"
-
+def evaluate(
+    img_dir: Path,
+    lbl_dir: Path,
+    checkpoint: Path,
+    img_size: int,
+    device: str,
+    exp_name: str,
+) -> dict:
     logger = logging.getLogger(__name__)
-    logger.info("=" * 60)
-    logger.info("EVALUACIÓN YOLO SOBRE SR")
-    logger.info("=" * 60)
-    for k, v in vars(args).items():
-        logger.info(f"  {k}: {v}")
-    logger.info("=" * 60)
 
-    if not args.yolo_checkpoint.exists():
-        logger.error(f"checkpoint no encontrado: {args.yolo_checkpoint}")
+    if not checkpoint.exists():
+        logger.error(f"checkpoint no encontrado: {checkpoint}")
         sys.exit(1)
 
-    sr_paths = sorted(p for p in args.sr_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXTS)
-    if not sr_paths:
-        logger.error(f"no hay imágenes sr en {args.sr_dir}")
+    img_paths = sorted(p for p in img_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXTS)
+    if not img_paths:
+        logger.error(f"no hay imágenes en {img_dir}")
         sys.exit(1)
-    logger.info(f"imágenes sr: {len(sr_paths)}")
 
-    # directorio temporal para el dataset de evaluación de ultralytics
+    logger.info(f"imágenes: {len(img_paths)} en {img_dir}")
+
     with tempfile.TemporaryDirectory(prefix="yolo_eval_") as tmp:
         tmp_dir = Path(tmp)
-        img_dir = tmp_dir / "images"
-        lbl_dir = tmp_dir / "labels"
-        img_dir.mkdir()
-        lbl_dir.mkdir()
+        img_d = tmp_dir / "images"
+        lbl_d = tmp_dir / "labels"
+        img_d.mkdir()
+        lbl_d.mkdir()
 
-        for sr_path in sr_paths:
-            shutil.copy2(sr_path, img_dir / sr_path.name)
-            annot = args.annot_dir / sr_path.with_suffix(".txt").name
-            if annot.exists():
-                shutil.copy2(annot, lbl_dir / annot.name)
+        for img_path in img_paths:
+            shutil.copy2(img_path, img_d / img_path.name)
+            # las etiquetas siempre vienen del test original (mismas para sr y original)
+            lbl_src = lbl_dir / img_path.stem
+            # buscar el .txt con el mismo stem (puede ser stem diferente si sr renombra)
+            lbl_candidate = lbl_dir / f"{img_path.stem}.txt"
+            if not lbl_candidate.exists():
+                # buscar por nombre base por si el sr añade sufijos
+                candidates = list(lbl_dir.glob(f"{img_path.stem}*.txt"))
+                lbl_candidate = candidates[0] if candidates else None
+            if lbl_candidate and lbl_candidate.exists():
+                shutil.copy2(lbl_candidate, lbl_d / f"{img_path.stem}.txt")
             else:
-                logger.warning(f"  sin anotación: {sr_path.name}")
-                # archivo vacío para imágenes sin objetos
-                (lbl_dir / sr_path.with_suffix(".txt").name).touch()
+                logger.warning(f"  sin etiqueta para {img_path.stem}")
 
         yaml_path = tmp_dir / "eval.yaml"
         yaml_path.write_text(
             f"path: {tmp_dir}\n"
             f"val: images\n"
-            f"nc: 1\n"
-            f"names: ['chromosome']\n"
+            f"nc: 2\n"
+            f"names: ['chromosome', 'dicentric']\n"
         )
 
-        model = YOLO(str(args.yolo_checkpoint))
+        model = YOLO(str(checkpoint))
         metrics = model.val(
             data=str(yaml_path),
-            imgsz=args.img_size,
-            conf=args.conf_threshold,
-            iou=args.iou_threshold,
+            imgsz=img_size,
             device=device,
             verbose=True,
         )
 
-    map50     = float(metrics.box.map50)
-    map50_95  = float(metrics.box.map)
-    precision = float(metrics.box.mp)
-    recall    = float(metrics.box.mr)
-    f1 = 2 * precision * recall / (precision + recall + 1e-8)
+    mp = float(metrics.box.mp)
+    mr = float(metrics.box.mr)
+    return {
+        "exp":       exp_name,
+        "img_dir":   str(img_dir),
+        "n_imgs":    len(img_paths),
+        "map50":     float(metrics.box.map50),
+        "map50_95":  float(metrics.box.map),
+        "precision": mp,
+        "recall":    mr,
+        "f1":        2 * mp * mr / (mp + mr + 1e-8),
+    }
 
-    logger.info("\n" + "=" * 50)
-    logger.info(f"resultados — {args.exp_name}")
-    logger.info(f"  map50:     {map50:.4f}")
-    logger.info(f"  map50-95:  {map50_95:.4f}")
-    logger.info(f"  precision: {precision:.4f}")
-    logger.info(f"  recall:    {recall:.4f}")
-    logger.info(f"  f1:        {f1:.4f}")
-    logger.info("=" * 50)
 
+def main() -> None:
+    args = parse_args()
+
+    # nombre por defecto es el nombre del directorio de imágenes
+    exp_name = args.exp_name or args.img_dir.name
+
+    log_file = Path("results/logs") / f"eval_{exp_name}.log"
+    logger = setup_logging(log_file, args.log_level)
+
+    logger.info("=" * 60)
+    logger.info("EVALUACIÓN YOLO")
+    logger.info("=" * 60)
+    logger.info(f"  exp_name:   {exp_name}")
+    logger.info(f"  img_dir:    {args.img_dir}")
+    logger.info(f"  lbl_dir:    {args.lbl_dir}")
+    logger.info(f"  checkpoint: {args.checkpoint}")
+    logger.info("=" * 60)
+
+    result = evaluate(
+        img_dir=args.img_dir,
+        lbl_dir=args.lbl_dir,
+        checkpoint=args.checkpoint,
+        img_size=args.img_size,
+        device=args.device,
+        exp_name=exp_name,
+    )
+
+    # mostrar resultado
+    logger.info("=" * 60)
+    logger.info(f"map50:     {result['map50']:.4f}")
+    logger.info(f"map50-95:  {result['map50_95']:.4f}")
+    logger.info(f"precision: {result['precision']:.4f}")
+    logger.info(f"recall:    {result['recall']:.4f}")
+    logger.info(f"f1:        {result['f1']:.4f}")
+    logger.info("=" * 60)
+
+    # guardar csv acumulativo (append si ya existe)
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    csv_path = args.output_dir / f"{args.exp_name}.csv"
-    with csv_path.open("w", newline="") as f:
-        writer = csv.DictWriter(
-            f, fieldnames=["exp_name", "map50", "map50_95", "precision", "recall", "f1"]
-        )
-        writer.writeheader()
-        writer.writerow({
-            "exp_name": args.exp_name,
-            "map50": map50,
-            "map50_95": map50_95,
-            "precision": precision,
-            "recall": recall,
-            "f1": f1,
-        })
-    logger.info(f"métricas en: {csv_path}")
+    csv_path = args.output_dir / "yolo_comparison.csv"
+    write_header = not csv_path.exists()
+    with csv_path.open("a", newline="") as f:
+        fieldnames = ["exp", "img_dir", "n_imgs", "map50", "map50_95", "precision", "recall", "f1"]
+        w = csv.DictWriter(f, fieldnames=fieldnames)
+        if write_header:
+            w.writeheader()
+        w.writerow(result)
+    logger.info(f"resultado añadido a: {csv_path}")
 
 
 if __name__ == "__main__":
