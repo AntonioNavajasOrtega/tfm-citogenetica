@@ -15,8 +15,8 @@ __pycache__/
 # --- Datos de imagen (grandes; usar Git LFS o excluir) ---
 # Las imágenes raw se excluyen para no saturar el repo.
 # Sube solo las anotaciones y un README de datos.
-data/raw/marked/
-data/raw/unmarked/
+# data/raw/marked/
+# data/raw/unmarked/
 data/raw/labels/*.JPG
 data/raw/labels/*.jpg
 data/raw/labels/*.png
