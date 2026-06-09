@@ -130,6 +130,7 @@ def train_fold(
     output_dir: Path,
     model_size: str,
     epochs: int,
+    patience: int,
     img_size: int,
     batch_size: int,
     device: str,
@@ -160,7 +161,7 @@ def train_fold(
         seed=seed,
         verbose=False,
         # hiperparámetros para dataset pequeño
-        patience=40,            # early stopping tras 40 épocas sin mejora
+        patience=patience,            # early stopping tras N épocas sin mejora
         lr0=0.005,              # lr inicial menor que el default (0.01) — más estable
         lrf=0.01,               # lr final = lr0 * lrf
         weight_decay=0.001,     # más regularización
@@ -301,6 +302,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--model_size",    default="n", choices=["n", "s", "m"],
                    help="nano recomendado para datasets pequeños")
     p.add_argument("--epochs",        type=int, default=150)
+    p.add_argument("--patience",      type=int, default=40)
     p.add_argument("--img_size",      type=int, default=512)
     p.add_argument("--batch_size",    type=int, default=4)
     p.add_argument("--k_folds",       type=int, default=5)
@@ -353,6 +355,7 @@ def main() -> None:
             output_dir=args.output_dir,
             model_size=args.model_size,
             epochs=args.epochs,
+            patience=args.patience,
             img_size=args.img_size,
             batch_size=args.batch_size,
             device=device,
