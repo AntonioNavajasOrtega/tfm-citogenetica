@@ -98,24 +98,29 @@ def evaluate(
         img_d.mkdir()
         lbl_d.mkdir()
 
+        valid_imgs = 0
         for img_path in img_paths:
-            shutil.copy2(img_path, img_d / img_path.name)
-            # las etiquetas siempre vienen del test original (mismas para sr y original)
-            lbl_src = lbl_dir / img_path.stem
-            # buscar el .txt con el mismo stem (puede ser stem diferente si sr renombra)
+            # buscar el .txt con el mismo stem
             lbl_candidate = lbl_dir / f"{img_path.stem}.txt"
             if not lbl_candidate.exists():
-                # buscar por nombre base por si el sr añade sufijos
                 candidates = list(lbl_dir.glob(f"{img_path.stem}*.txt"))
                 lbl_candidate = candidates[0] if candidates else None
+                
             if lbl_candidate and lbl_candidate.exists():
+                shutil.copy2(img_path, img_d / img_path.name)
                 shutil.copy2(lbl_candidate, lbl_d / f"{img_path.stem}.txt")
+                valid_imgs += 1
             else:
-                logger.warning(f"  sin etiqueta para {img_path.stem}")
+                pass # ignorar imagen si no es del test set
+                
+        if valid_imgs == 0:
+            logger.error(f"No se encontró ninguna imagen en {img_dir} que tuviera etiqueta en {lbl_dir}.")
+            sys.exit(1)
 
         yaml_path = tmp_dir / "eval.yaml"
         yaml_path.write_text(
             f"path: {tmp_dir}\n"
+            f"train: images\n"
             f"val: images\n"
             f"nc: 2\n"
             f"names: ['chromosome', 'dicentric']\n"

@@ -178,6 +178,8 @@ def train_fold(
         data=str((fold_dir / "dataset.yaml").resolve()),
         imgsz=img_size,
         device=device,
+        project=str(project_dir),
+        name="val",
         verbose=False,
     )
 
@@ -234,6 +236,7 @@ def evaluate_on_test(
     yaml_path = test_data_dir / "test.yaml"
     yaml_path.write_text(
         f"path: {test_data_dir.resolve()}\n"
+        f"train: images\n"
         f"val: images\n"
         f"nc: 2\n"
         f"names: ['chromosome', 'dicentric']\n"
@@ -327,28 +330,26 @@ def main() -> None:
     device = check_cuda() if args.device == "cuda" else "cpu"
 
     logger.info("=" * 60)
-    logger.info("ENTRENAMIENTO YOLO — BASELINE")
+    logger.info("ENTRENAMIENTO YOLO — BASELINE (FOLDS FIJOS)")
     logger.info("=" * 60)
     for k, v in vars(args).items():
         logger.info(f"  {k}: {v}")
     logger.info("=" * 60)
 
-    train_imgs = get_image_paths(args.train_img_dir)
-    if not train_imgs:
-        logger.error(f"no hay imágenes en {args.train_img_dir}")
-        sys.exit(1)
-    logger.info(f"imágenes train: {len(train_imgs)}")
-
-    splits = build_kfold_splits(train_imgs, args.k_folds, args.seed)
     cv_results = []
 
-    for fold_idx, (train_paths, val_paths) in enumerate(
-        tqdm(splits, desc="5-fold cv", unit="fold"), start=1
-    ):
-        fold_dir = prepare_fold_dir(
-            fold_idx, train_paths, val_paths, args.train_lbl_dir,
-            args.nc, args.class_names,
-        )
+    for fold_idx in range(1, args.k_folds + 1):
+        fold_dir = Path("data/folds") / f"fold{fold_idx}"
+        if not fold_dir.exists():
+            logger.error(f"Error: la carpeta {fold_dir} no existe. El sistema de folds fijos requiere esta carpeta.")
+            sys.exit(1)
+            
+        dataset_yaml = fold_dir / "dataset.yaml"
+        if not dataset_yaml.exists():
+            logger.error(f"Error: el archivo {dataset_yaml} no existe.")
+            sys.exit(1)
+
+        logger.info(f"Usando fold fijo: {fold_dir}")
         r = train_fold(
             fold_idx=fold_idx,
             fold_dir=fold_dir,

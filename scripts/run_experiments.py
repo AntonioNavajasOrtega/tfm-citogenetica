@@ -60,7 +60,7 @@ def main():
                 "--batch_size", str(args.batch_size),
                 "--img_size", str(i_size),
                 "--output_dir", str(output_dir),
-                "--exp_name", "run"
+                "--exp_name", exp_name
             ]
             
             # Ejecutar el comando y esperar a que termine

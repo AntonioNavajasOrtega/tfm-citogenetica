@@ -1,0 +1,4 @@
+path: C:\TFM\data\folds\test
+val: images
+nc: 2
+names: ['chromosome', 'dicentric']
