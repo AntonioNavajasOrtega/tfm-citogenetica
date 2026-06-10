@@ -1,8 +1,7 @@
 path: C:\TFM\data\folds\fold3
 train: train/images
 val: val/images
-test: C:\TFM\data\test\images
 nc: 2
 names:
-- chromosome
-- dicentric
+- chr
+- dic

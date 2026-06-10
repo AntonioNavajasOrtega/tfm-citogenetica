@@ -1,0 +1,6 @@
+path: C:\TFM\data\test
+val: images
+nc: 2
+names:
+- chr
+- dic
