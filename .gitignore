@@ -23,10 +23,6 @@ data/raw/labels/*.png
 data/raw/labels/*.tif
 data/raw/labels/*.tiff
 
-# Las imágenes procesadas/LR/SR también pueden ser muy grandes:
-data/processed/
-data/lr/
-data/sr/
 
 # --- Modelos y checkpoints (pueden pesar GB) ---
 models/
