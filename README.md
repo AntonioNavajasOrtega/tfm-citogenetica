@@ -41,8 +41,10 @@ TFM/
 │   ├── augment.py          # processed → augmented (imagen + bboxes)
 │   ├── degrade.py          # processed → lr/x2 (simular baja resolución)
 │   ├── train_yolo.py       # entrenar yolo con k-fold sobre processed
-│   ├── train_stablesr.py   # finetuning stablesr (hr + lr → checkpoint)
-│   ├── run_sr.py           # inferencia sr (lr → sr/x2/expN)
+│   ├── diffusion/          # scripts integrados para ResShift y StableSR
+│   │   ├── train_resshift.py # finetuning de ResShift (hr + lr → checkpoint)
+│   │   ├── run_resshift.py   # inferencia sr nativa con ResShift
+│   │   └── run_stablesr.py   # inferencia sr delegada a StableSR
 │   ├── evaluate_yolo.py    # yolo sobre imágenes sr (mAP, F1)
 │   └── compute_metrics.py  # métricas de imagen sr vs hr (psnr, ssim)
 ├── configs/
@@ -84,8 +86,8 @@ python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_
 | 2. Degradación LR | `degrade.py` | ✅ ejecutado — 50 imgs en `data/lr/x2/` |
 | 3. Data augmentation | `augment.py` | ⏳ pendiente |
 | 4. Entrenamiento YOLO baseline | `train_yolo.py` | ⏳ pendiente |
-| 5. Finetuning StableSR (×3 configs) | `train_stablesr.py` | ⏳ pendiente |
-| 6. Inferencia SR | `run_sr.py` | ⏳ pendiente |
+| 5. Entrenamiento ResShift | `diffusion/train_resshift.py` | ⏳ pendiente |
+| 6. Inferencia SR | `diffusion/run_*.py` | ⏳ pendiente |
 | 7. Evaluación YOLO sobre SR | `evaluate_yolo.py` | ⏳ pendiente |
 | 8. Métricas PSNR/SSIM | `compute_metrics.py` | ⏳ pendiente |
 
@@ -115,36 +117,32 @@ python scripts/train_yolo.py `
     --epochs 50 --exp_name baseline_kfold5
 ```
 
-### Fase 3 — Finetuning StableSR
+### Fase 3 — Entrenamiento de Modelos de Difusión
 
 ```powershell
-# exp0 — base (DDIM 20 steps, L1+LPIPS)
-python scripts/train_stablesr.py `
-    --config configs/stablesr_default.yaml `
+# Ejemplo: Finetuning de ResShift
+python scripts/diffusion/train_resshift.py `
+    --config ResShift/configs/realsr_swinunet_realesrgan256.yaml `
     --hr_dir data/processed --lr_dir data/lr/x2 `
-    --exp_name exp0_default
-
-# exp1 — DDPM 50 steps
-python scripts/train_stablesr.py `
-    --config configs/stablesr_exp1.yaml `
-    --hr_dir data/processed --lr_dir data/lr/x2 `
-    --exp_name exp1_ddpm50
-
-# exp2 — pérdida L2
-python scripts/train_stablesr.py `
-    --config configs/stablesr_exp2.yaml `
-    --hr_dir data/processed --lr_dir data/lr/x2 `
-    --exp_name exp2_l2loss
+    --exp_name resshift_exp1_finetune --epochs 50
 ```
 
 ### Fase 4 — Inferencia SR (repetir por experimento)
 
 ```powershell
-python scripts/run_sr.py `
-    --lr_dir data/lr/x2 `
+# Inferencia con StableSR
+python scripts/diffusion/run_stablesr.py `
+    --input_dir data/lr/x2 `
     --output_dir data/sr/x2 `
-    --checkpoint models/stablesr_finetuned/exp0_default/checkpoints/best.ckpt `
-    --scale 2 --exp_name exp0_default
+    --sampler ddim --ddpm_steps 50 --colorfix wavelet `
+    --exp_name stablesr_ddim_50
+
+# Inferencia con ResShift
+python scripts/diffusion/run_resshift.py `
+    --input_dir data/lr/x2 `
+    --output_dir data/sr/x2 `
+    --checkpoint ResShift/weights/resshift_realsrx4_s15_v1.pth `
+    --task realsr --scale 2 --exp_name resshift_v1_eval
 ```
 
 ### Fase 5 — Evaluación
