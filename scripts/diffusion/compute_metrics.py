@@ -96,6 +96,7 @@ def load_image_pair(sr_path: Path, hr_dir: Path) -> tuple[np.ndarray, np.ndarray
     hr_candidates = [
         hr_dir / sr_path.name,
         hr_dir / sr_path.with_suffix(".png").name,
+        hr_dir / sr_path.with_suffix(".jpg").name,
     ]
     hr_path = next((c for c in hr_candidates if c.exists()), None)
     if hr_path is None:
