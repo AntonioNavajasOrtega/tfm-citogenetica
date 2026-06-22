@@ -1,0 +1,5 @@
+path: C:\TFM\data\yolo_kfold\fold_5
+train: train/images
+val: val/images
+nc: 1
+names: ['']

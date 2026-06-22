@@ -1,0 +1,64 @@
+{
+  "model": "yolo11s",
+  "folds": {
+    "fold_1": {
+      "best_epoch": 89,
+      "total_epochs": 100,
+      "precision": 0.97775,
+      "recall": 0.9704,
+      "mAP50": 0.98245,
+      "mAP50_95": 0.85367,
+      "f1": 0.974061
+    },
+    "fold_2": {
+      "best_epoch": 95,
+      "total_epochs": 100,
+      "precision": 0.97822,
+      "recall": 0.98069,
+      "mAP50": 0.9915,
+      "mAP50_95": 0.86241,
+      "f1": 0.979453
+    },
+    "fold_3": {
+      "best_epoch": 65,
+      "total_epochs": 100,
+      "precision": 0.9746,
+      "recall": 0.97972,
+      "mAP50": 0.98328,
+      "mAP50_95": 0.84981,
+      "f1": 0.977153
+    },
+    "fold_4": {
+      "best_epoch": 87,
+      "total_epochs": 100,
+      "precision": 0.99345,
+      "recall": 0.96838,
+      "mAP50": 0.98375,
+      "mAP50_95": 0.85188,
+      "f1": 0.980755
+    },
+    "fold_5": {
+      "best_epoch": 76,
+      "total_epochs": 100,
+      "precision": 0.97209,
+      "recall": 0.98478,
+      "mAP50": 0.99083,
+      "mAP50_95": 0.85922,
+      "f1": 0.978394
+    }
+  },
+  "mean": {
+    "precision": 0.979222,
+    "recall": 0.976794,
+    "f1": 0.977963,
+    "mAP50": 0.986362,
+    "mAP50_95": 0.855398
+  },
+  "std": {
+    "precision": 0.007454,
+    "recall": 0.006312,
+    "f1": 0.002284,
+    "mAP50": 0.003949,
+    "mAP50_95": 0.004698
+  }
+}

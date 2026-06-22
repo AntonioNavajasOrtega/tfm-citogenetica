@@ -1,5 +1,0 @@
-path: C:\TFM\tfm-citogenetica\data\yolo_1class
-train: train/images
-val: val/images
-nc: 1
-names: ["chromosome"]
