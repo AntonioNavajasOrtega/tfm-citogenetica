@@ -5,7 +5,7 @@ Mantiene la misma estructura de carpetas que data/crops_hr.
 Aplica desenfoque gaussiano, ruido y reducción de escala.
 
 Uso:
-    python scripts/auxiliary/degrade_crops.py --scale 2
+    python scripts/auxiliary/degrade_crops.py --scale 4
 """
 
 import argparse
@@ -20,7 +20,7 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--hr_dir", type=Path, default=Path("data/crops_hr"))
     p.add_argument("--lr_dir", type=Path, default=Path("data/crops_lr"))
-    p.add_argument("--scale", type=int, default=2)
+    p.add_argument("--scale", type=int, default=4)
     return p.parse_args()
 
 

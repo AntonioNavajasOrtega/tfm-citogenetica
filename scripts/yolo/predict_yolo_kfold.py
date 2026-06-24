@@ -70,14 +70,14 @@ def parse_args():
     )
     p.add_argument("--folds_dir",       type=Path, default=Path("data/yolo_kfold"),
                    help="Directorio raíz con fold_1/, fold_2/, … (salida de generate_folds.py).")
-    p.add_argument("--model",           type=str,  default="yolo11n.pt",
+    p.add_argument("--model",           type=str,  default="yolo11s.pt",
                    help="Modelo usado en el entrenamiento (ej. yolo11s.pt). "
                         "Define dónde se buscan los pesos: models/yolo_kfold/{model_stem}/fold_N/")
     p.add_argument("--labels_2class_dir", type=Path, default=Path("data/raw/labels"),
                    help="Directorio con etiquetas GT de 2 clases (para asignar normal/dicéntrico).")
     p.add_argument("--crops_out_dir",   type=Path, default=Path("data/crops_hr"),
                    help="Directorio de salida de los recortes.")
-    p.add_argument("--img_size",        type=int,  default=512)
+    p.add_argument("--img_size",        type=int,  default=1280)
     p.add_argument("--iou_thresh",      type=float, default=0.3,
                    help="IoU mínimo para asignar etiqueta GT a un crop.")
     p.add_argument("--margin",          type=int,  default=10,

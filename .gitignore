@@ -1,8 +1,4 @@
-# ============================================================
-#  .gitignore — TFM Super-Resolución Citogenética
-# ============================================================
-
-# --- Entorno virtual Python (NO subir al repo) ---
+# --- Entorno virtual Python ---
 .venv/
 venv/
 env/
@@ -12,36 +8,6 @@ __pycache__/
 *.pyd
 .Python
 
-# --- Datos de imagen (grandes; usar Git LFS o excluir) ---
-# Las imágenes raw se excluyen para no saturar el repo.
-# Sube solo las anotaciones y un README de datos.
-# data/raw/marked/
-# data/raw/unmarked/
-data/raw/labels/*.JPG
-data/raw/labels/*.jpg
-data/raw/labels/*.png
-data/raw/labels/*.tif
-data/raw/labels/*.tiff
-
-
-# --- Modelos y checkpoints (pueden pesar GB) ---
-models/
-*.pt
-*.ckpt
-*.pth
-*.safetensors
-*.bin
-*.onnx
-
-# --- Resultados (se regeneran; puedes incluir los CSV si quieres) ---
-# Descomenta las líneas siguientes si NO quieres subir resultados:
-# results/metrics/
-# results/plots/
-# results/logs/
-
-# Sí subimos los CSV de métricas (son ligeros y útiles)
-results/plots/*.png
-results/logs/
 
 # --- Caché de HuggingFace / transformers ---
 .cache/
