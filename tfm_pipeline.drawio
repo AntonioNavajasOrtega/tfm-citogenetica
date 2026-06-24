@@ -1,0 +1,193 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="JfpG34J5rGhsP0Mn-GrX" name="Página-1">
+    <mxGraphModel dx="2009" dy="1114" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="phase1_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;opacity=30;verticalAlign=top;fontSize=11;" value="" vertex="1">
+          <mxGeometry height="130" width="1050" x="30" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="phase1_label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];rotatable=0;fontSize=13;fontStyle=1;fontColor=#0050ef;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;FASE 1 — Detección de Cromosomas (YOLO11s)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="660" x="40" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_dataset" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Conjunto de Datos&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="160" x="50" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_kfold" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;5-Fold CV&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="160" x="250" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_yolo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="&lt;div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;Entrenamiento YOLO11s&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;/font&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="160" x="440" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_pred" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="&lt;div&gt;&lt;b style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Predicciones BBox&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="160" x="650" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_crops" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Recortes HR&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="70" width="160" x="860" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="f1_dataset" style="edgeStyle=orthogonalEdgeStyle;" target="f1_kfold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="f1_kfold" style="edgeStyle=orthogonalEdgeStyle;" target="f1_yolo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="f1_yolo" style="edgeStyle=orthogonalEdgeStyle;" target="f1_pred">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="f1_pred" style="edgeStyle=orthogonalEdgeStyle;" target="f1_crops">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="phase2_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;opacity=30;verticalAlign=top;fontSize=11;" value="" vertex="1">
+          <mxGeometry height="210" width="1440" x="20" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="phase2_label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=13;fontStyle=1;fontColor=#7d4e00;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;FASE 2 — Super-Resolución (ResShift ×4)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="500" x="30" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_crops_in" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Recortes HR&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="60" width="140" x="50" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="JryRnCQvX9t4fAHrAFuW-2" edge="1" parent="1" source="f2_degradation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="f2_baseline">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_degradation" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Degradación ×4 Bicúbica&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="170" x="230" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_pairs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Pares LR / HR&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="160" x="440" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_kfold" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;5-Fold CV&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="150" x="640" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_resshift" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Entrenamiento ResShift&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="100" width="175" x="830" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_sr_out" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Recortes SR (×4)&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="90" width="170" x="1045" y="235" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_metrics" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0a30a;strokeColor=#BD7000;fontColor=#000000;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Métricas de Calidad (IQA)&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="160" x="1270" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="JryRnCQvX9t4fAHrAFuW-3" edge="1" parent="1" source="f2_baseline" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="f2_metrics">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_baseline" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;dashed=1;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Baseline Clásico&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="70" width="170" x="230" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="f2_crops_in" style="edgeStyle=orthogonalEdgeStyle;" target="f2_degradation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="f2_degradation" style="edgeStyle=orthogonalEdgeStyle;" target="f2_pairs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="f2_pairs" style="edgeStyle=orthogonalEdgeStyle;" target="f2_kfold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="f2_kfold" style="edgeStyle=orthogonalEdgeStyle;" target="f2_resshift">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="f2_resshift" style="edgeStyle=orthogonalEdgeStyle;" target="f2_sr_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="f2_sr_out" style="edgeStyle=orthogonalEdgeStyle;" target="f2_metrics">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cross12" edge="1" parent="1" source="f1_crops" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;strokeWidth=2;" target="f2_crops_in">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="940" y="180" />
+              <mxPoint x="120" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="phase3_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=30;verticalAlign=top;fontSize=11;" value="" vertex="1">
+          <mxGeometry height="230" width="1490" x="30" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="phase3_label" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;fontSize=13;fontStyle=1;fontColor=#1a5c00;" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;FASE 3 — Clasificación de Cromosomas (DenseNet)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="50" width="800" x="40" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_hr_in" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Recortes HR Originales&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="75" width="160" x="50" y="475" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_sr_in" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Recortes SR&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="75" width="160" x="50" y="565" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_kfold" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;&lt;b&gt;5-Fold CV&lt;/b&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="80" width="155" x="260" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_augment" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Data Augmentation&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="80" width="155" x="460" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_densenet_hr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Clasificador HR&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="100" width="165" x="665" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_densenet_sr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Clasificadores SR&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="100" width="165" x="665" y="550" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_pred_hr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Predicciones HR&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="75" width="155" x="870" y="452.5" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_pred_sr" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Predicciones SR&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="75" width="155" x="870" y="562.5" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_compare" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0a30a;strokeColor=#BD7000;fontColor=#000000;fontSize=10;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Comparación HR vs. SR&lt;/font&gt;&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="175" x="1080" y="495" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_conclusion" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Conclusión&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="75" width="170" x="1320" y="507.5" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="f3_hr_in" style="edgeStyle=orthogonalEdgeStyle;" target="f3_kfold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="f3_sr_in" style="edgeStyle=orthogonalEdgeStyle;" target="f3_kfold">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="f3_kfold" style="edgeStyle=orthogonalEdgeStyle;" target="f3_augment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="f3_augment" style="edgeStyle=orthogonalEdgeStyle;" target="f3_densenet_hr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="f3_augment" style="edgeStyle=orthogonalEdgeStyle;" target="f3_densenet_sr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="f3_densenet_hr" style="edgeStyle=orthogonalEdgeStyle;" target="f3_pred_hr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="f3_densenet_sr" style="edgeStyle=orthogonalEdgeStyle;" target="f3_pred_sr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="f3_pred_hr" style="edgeStyle=orthogonalEdgeStyle;" target="f3_compare">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="f3_pred_sr" style="edgeStyle=orthogonalEdgeStyle;" target="f3_compare">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="f3_compare" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=2;strokeColor=#b85450;" target="f3_conclusion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cross13_hr" edge="1" parent="1" source="f1_crops" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="f3_hr_in">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="105" />
+              <mxPoint x="1030" y="430" />
+              <mxPoint x="130" y="430" />
+            </Array>
+            <mxPoint x="1030" y="22.5" as="sourcePoint" />
+            <mxPoint x="59.99999999999977" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cross23_sr" edge="1" parent="1" source="f2_sr_out" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;strokeWidth=2;" target="f3_sr_in">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1135" y="280" />
+              <mxPoint x="1135" y="420" />
+              <mxPoint x="20" y="420" />
+              <mxPoint x="20" y="602" />
+              <mxPoint x="50" y="602" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
