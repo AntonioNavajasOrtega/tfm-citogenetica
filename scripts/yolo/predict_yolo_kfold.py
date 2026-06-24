@@ -134,11 +134,12 @@ def main():
         fold_idx  = fold_name.replace("fold_", "")
 
         fold_project_dir = Path("models/yolo_kfold") / model_stem / fold_name
-        # Buscar todos los best.pt en subcarpetas tipo train*/weights/best.pt
-        best_pt_candidates = list(fold_project_dir.glob("train*/weights/best.pt"))
+        # Buscar recursivamente todos los best.pt dentro de la carpeta del fold
+        # (cubre train/weights/best.pt, train2/weights/best.pt o weights/best.pt directamente)
+        best_pt_candidates = list(fold_project_dir.rglob("best.pt"))
         
         if not best_pt_candidates:
-            logger.error(f"Modelo para {fold_name} no encontrado en {fold_project_dir}\\train*\\weights\\best.pt")
+            logger.error(f"Modelo para {fold_name} no encontrado dentro de {fold_project_dir}")
             continue
             
         # Tomar el modificado más recientemente por si hay train, train2, train3...
