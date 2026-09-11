@@ -8,8 +8,6 @@ __pycache__/
 *.pyd
 .Python
 data/
-runs/
-results/
 temporary/
 
 

@@ -1,0 +1,38 @@
+2026-07-18 17:35:27,355 [INFO] ============================================================
+2026-07-18 17:35:27,355 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-18 17:35:27,355 [INFO] ============================================================
+2026-07-18 17:35:27,355 [INFO]   hr_dir: data\sr_dataset\HR
+2026-07-18 17:35:27,356 [INFO]   lr_dir: data\sr_dataset\lr_x4
+2026-07-18 17:35:27,356 [INFO]   val_hr_dir: None
+2026-07-18 17:35:27,356 [INFO]   val_lr_dir: None
+2026-07-18 17:35:27,356 [INFO]   scale: 4
+2026-07-18 17:35:27,356 [INFO]   config: None
+2026-07-18 17:35:27,356 [INFO]   pretrained_ckpt: C:\TFM\ResShift\weights\resshift_realsrx4_s15_v1.pth
+2026-07-18 17:35:27,357 [INFO]   iterations: 5000
+2026-07-18 17:35:27,357 [INFO]   batch_size: 2
+2026-07-18 17:35:27,357 [INFO]   lr: 5e-05
+2026-07-18 17:35:27,357 [INFO]   save_freq: 5000
+2026-07-18 17:35:27,357 [INFO]   val_freq: None
+2026-07-18 17:35:27,357 [INFO]   resume_from: None
+2026-07-18 17:35:27,357 [INFO]   tune_decoder: False
+2026-07-18 17:35:27,357 [INFO]   lora_tune_decoder: False
+2026-07-18 17:35:27,357 [INFO]   ema_rate: None
+2026-07-18 17:35:27,357 [INFO]   augment: False
+2026-07-18 17:35:27,358 [INFO]   num_workers: 2
+2026-07-18 17:35:27,358 [INFO]   grad_accum_steps: 1
+2026-07-18 17:35:27,358 [INFO]   output_dir: E:\temp
+2026-07-18 17:35:27,358 [INFO]   seed: 42
+2026-07-18 17:35:27,358 [INFO]   exp_name: resshift_finetune
+2026-07-18 17:35:27,358 [INFO]   log_level: INFO
+2026-07-18 17:35:27,358 [INFO] ============================================================
+2026-07-18 17:35:27,478 [INFO] Config base: C:\TFM\ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-18 17:35:27,537 [INFO] YAML de finetune generado en: E:\temp\resshift_finetune\finetune_config.yaml
+2026-07-18 17:35:27,539 [INFO] Cargando configuración desde: E:\temp\resshift_finetune\finetune_config.yaml
+2026-07-18 17:35:27,590 [INFO] Inicializando trainer...
+2026-07-18 17:35:31,516 [INFO] Iniciando entrenamiento por 5000 iteraciones...
+2026-07-18 17:35:33,473 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-18 19:29:04,196 [INFO] Entrenamiento completado. Checkpoints en: E:\temp\resshift_finetune

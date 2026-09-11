@@ -1,0 +1,401 @@
+2026-07-04 03:10:09,274 [INFO] ============================================================
+2026-07-04 03:10:09,275 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-04 03:10:09,275 [INFO] ============================================================
+2026-07-04 03:10:09,275 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-04 03:10:09,275 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-04 03:10:09,275 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-04 03:10:09,275 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-04 03:10:09,275 [INFO]   scale: 4
+2026-07-04 03:10:09,276 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 03:10:09,276 [INFO]   pretrained_ckpt: None
+2026-07-04 03:10:09,276 [INFO]   iterations: 2000
+2026-07-04 03:10:09,276 [INFO]   batch_size: 2
+2026-07-04 03:10:09,276 [INFO]   lr: 5e-05
+2026-07-04 03:10:09,276 [INFO]   save_freq: 1000
+2026-07-04 03:10:09,276 [INFO]   val_freq: 500
+2026-07-04 03:10:09,276 [INFO]   resume_from: None
+2026-07-04 03:10:09,277 [INFO]   tune_decoder: False
+2026-07-04 03:10:09,277 [INFO]   lora_tune_decoder: True
+2026-07-04 03:10:09,277 [INFO]   ema_rate: None
+2026-07-04 03:10:09,277 [INFO]   augment: True
+2026-07-04 03:10:09,277 [INFO]   num_workers: 2
+2026-07-04 03:10:09,277 [INFO]   grad_accum_steps: 2
+2026-07-04 03:10:09,277 [INFO]   output_dir: models\resshift_finetuned
+2026-07-04 03:10:09,277 [INFO]   seed: 42
+2026-07-04 03:10:09,277 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-04 03:10:09,278 [INFO]   log_level: INFO
+2026-07-04 03:10:09,278 [INFO] ============================================================
+2026-07-04 03:10:09,386 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 03:10:09,438 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 03:10:09,440 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 03:10:09,481 [INFO] Inicializando trainer...
+2026-07-04 03:10:12,850 [INFO] Iniciando entrenamiento por 2000 iteraciones...
+2026-07-04 03:10:14,122 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-04 03:10:15,675 [ERROR] Error en el entrenamiento: 
+2026-07-04 03:12:53,686 [INFO] ============================================================
+2026-07-04 03:12:53,686 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-04 03:12:53,686 [INFO] ============================================================
+2026-07-04 03:12:53,686 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-04 03:12:53,686 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-04 03:12:53,687 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-04 03:12:53,687 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-04 03:12:53,687 [INFO]   scale: 4
+2026-07-04 03:12:53,687 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 03:12:53,687 [INFO]   pretrained_ckpt: None
+2026-07-04 03:12:53,687 [INFO]   iterations: 2000
+2026-07-04 03:12:53,687 [INFO]   batch_size: 2
+2026-07-04 03:12:53,687 [INFO]   lr: 5e-05
+2026-07-04 03:12:53,687 [INFO]   save_freq: 1000
+2026-07-04 03:12:53,687 [INFO]   val_freq: 500
+2026-07-04 03:12:53,687 [INFO]   resume_from: None
+2026-07-04 03:12:53,688 [INFO]   tune_decoder: False
+2026-07-04 03:12:53,688 [INFO]   lora_tune_decoder: True
+2026-07-04 03:12:53,688 [INFO]   ema_rate: None
+2026-07-04 03:12:53,688 [INFO]   augment: True
+2026-07-04 03:12:53,688 [INFO]   num_workers: 2
+2026-07-04 03:12:53,688 [INFO]   grad_accum_steps: 2
+2026-07-04 03:12:53,688 [INFO]   output_dir: models\resshift_finetuned
+2026-07-04 03:12:53,688 [INFO]   seed: 42
+2026-07-04 03:12:53,689 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-04 03:12:53,689 [INFO]   log_level: INFO
+2026-07-04 03:12:53,689 [INFO] ============================================================
+2026-07-04 03:12:53,800 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 03:12:53,852 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 03:12:53,854 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 03:12:53,889 [INFO] Inicializando trainer...
+2026-07-04 03:12:57,179 [INFO] Iniciando entrenamiento por 2000 iteraciones...
+2026-07-04 03:12:58,486 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-04 03:13:00,162 [ERROR] Error en el entrenamiento: 
+2026-07-04 03:14:46,253 [INFO] ============================================================
+2026-07-04 03:14:46,253 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-04 03:14:46,253 [INFO] ============================================================
+2026-07-04 03:14:46,254 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-04 03:14:46,254 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-04 03:14:46,254 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-04 03:14:46,254 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-04 03:14:46,254 [INFO]   scale: 4
+2026-07-04 03:14:46,254 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 03:14:46,254 [INFO]   pretrained_ckpt: None
+2026-07-04 03:14:46,254 [INFO]   iterations: 2000
+2026-07-04 03:14:46,254 [INFO]   batch_size: 2
+2026-07-04 03:14:46,255 [INFO]   lr: 5e-05
+2026-07-04 03:14:46,255 [INFO]   save_freq: 1000
+2026-07-04 03:14:46,255 [INFO]   val_freq: 500
+2026-07-04 03:14:46,255 [INFO]   resume_from: None
+2026-07-04 03:14:46,255 [INFO]   tune_decoder: False
+2026-07-04 03:14:46,255 [INFO]   lora_tune_decoder: True
+2026-07-04 03:14:46,255 [INFO]   ema_rate: None
+2026-07-04 03:14:46,255 [INFO]   augment: True
+2026-07-04 03:14:46,255 [INFO]   num_workers: 2
+2026-07-04 03:14:46,255 [INFO]   grad_accum_steps: 2
+2026-07-04 03:14:46,255 [INFO]   output_dir: models\resshift_finetuned
+2026-07-04 03:14:46,255 [INFO]   seed: 42
+2026-07-04 03:14:46,255 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-04 03:14:46,257 [INFO]   log_level: INFO
+2026-07-04 03:14:46,257 [INFO] ============================================================
+2026-07-04 03:14:46,370 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 03:14:46,424 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 03:14:46,426 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 03:14:46,468 [INFO] Inicializando trainer...
+2026-07-04 03:14:50,009 [INFO] Iniciando entrenamiento por 2000 iteraciones...
+2026-07-04 03:14:51,350 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-04 03:15:06,054 [ERROR] Error en el entrenamiento: element 0 of tensors does not require grad and does not have a grad_fn
+2026-07-04 03:28:57,910 [INFO] ============================================================
+2026-07-04 03:28:57,911 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-04 03:28:57,911 [INFO] ============================================================
+2026-07-04 03:28:57,911 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-04 03:28:57,911 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-04 03:28:57,911 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-04 03:28:57,911 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-04 03:28:57,911 [INFO]   scale: 4
+2026-07-04 03:28:57,912 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 03:28:57,912 [INFO]   pretrained_ckpt: None
+2026-07-04 03:28:57,912 [INFO]   iterations: 2000
+2026-07-04 03:28:57,912 [INFO]   batch_size: 2
+2026-07-04 03:28:57,912 [INFO]   lr: 5e-05
+2026-07-04 03:28:57,912 [INFO]   save_freq: 1000
+2026-07-04 03:28:57,912 [INFO]   val_freq: 500
+2026-07-04 03:28:57,912 [INFO]   resume_from: None
+2026-07-04 03:28:57,912 [INFO]   tune_decoder: False
+2026-07-04 03:28:57,912 [INFO]   lora_tune_decoder: False
+2026-07-04 03:28:57,912 [INFO]   ema_rate: None
+2026-07-04 03:28:57,912 [INFO]   augment: True
+2026-07-04 03:28:57,912 [INFO]   num_workers: 2
+2026-07-04 03:28:57,912 [INFO]   grad_accum_steps: 2
+2026-07-04 03:28:57,912 [INFO]   output_dir: models\resshift_finetuned
+2026-07-04 03:28:57,912 [INFO]   seed: 42
+2026-07-04 03:28:57,912 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-04 03:28:57,913 [INFO]   log_level: INFO
+2026-07-04 03:28:57,913 [INFO] ============================================================
+2026-07-04 03:28:58,017 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 03:28:58,069 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 03:28:58,071 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 03:28:58,113 [INFO] Inicializando trainer...
+2026-07-04 03:29:01,438 [INFO] Iniciando entrenamiento por 2000 iteraciones...
+2026-07-04 03:29:03,132 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-04 03:34:12,120 [ERROR] Error en el entrenamiento: Argument #4: Padding size should be less than the corresponding input dimension, but got: padding (0, 49) at dimension 3 of input [1, 3, 16, 15]
+2026-07-04 13:02:18,782 [INFO] ============================================================
+2026-07-04 13:02:18,782 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-04 13:02:18,782 [INFO] ============================================================
+2026-07-04 13:02:18,782 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-04 13:02:18,783 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-04 13:02:18,783 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-04 13:02:18,783 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-04 13:02:18,783 [INFO]   scale: 4
+2026-07-04 13:02:18,783 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 13:02:18,783 [INFO]   pretrained_ckpt: None
+2026-07-04 13:02:18,783 [INFO]   iterations: 8000
+2026-07-04 13:02:18,783 [INFO]   batch_size: 2
+2026-07-04 13:02:18,784 [INFO]   lr: 5e-05
+2026-07-04 13:02:18,784 [INFO]   save_freq: 1000
+2026-07-04 13:02:18,784 [INFO]   val_freq: 500
+2026-07-04 13:02:18,784 [INFO]   resume_from: None
+2026-07-04 13:02:18,784 [INFO]   tune_decoder: False
+2026-07-04 13:02:18,784 [INFO]   lora_tune_decoder: False
+2026-07-04 13:02:18,784 [INFO]   ema_rate: None
+2026-07-04 13:02:18,784 [INFO]   augment: True
+2026-07-04 13:02:18,784 [INFO]   num_workers: 2
+2026-07-04 13:02:18,784 [INFO]   grad_accum_steps: 2
+2026-07-04 13:02:18,784 [INFO]   output_dir: models\resshift_finetuned
+2026-07-04 13:02:18,784 [INFO]   seed: 42
+2026-07-04 13:02:18,785 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-04 13:02:18,785 [INFO]   log_level: INFO
+2026-07-04 13:02:18,785 [INFO] ============================================================
+2026-07-04 13:02:18,893 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 13:02:18,945 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 13:02:18,946 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 13:02:18,990 [INFO] Inicializando trainer...
+2026-07-04 13:02:22,314 [INFO] Iniciando entrenamiento por 8000 iteraciones...
+2026-07-04 13:02:23,571 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-04 13:08:06,727 [ERROR] Error en el entrenamiento: Input images must have the same dimensions.
+2026-07-04 16:26:23,651 [INFO] ============================================================
+2026-07-04 16:26:25,671 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-04 16:26:25,672 [INFO] ============================================================
+2026-07-04 16:26:25,672 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-04 16:26:25,672 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-04 16:26:25,672 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-04 16:26:25,672 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-04 16:26:25,673 [INFO]   scale: 4
+2026-07-04 16:26:25,673 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 16:26:25,673 [INFO]   pretrained_ckpt: None
+2026-07-04 16:26:25,673 [INFO]   iterations: 8000
+2026-07-04 16:26:25,673 [INFO]   batch_size: 2
+2026-07-04 16:26:25,673 [INFO]   lr: 5e-05
+2026-07-04 16:26:25,673 [INFO]   save_freq: 1000
+2026-07-04 16:26:25,674 [INFO]   val_freq: 4000
+2026-07-04 16:26:25,674 [INFO]   resume_from: None
+2026-07-04 16:26:25,674 [INFO]   tune_decoder: False
+2026-07-04 16:26:25,674 [INFO]   lora_tune_decoder: False
+2026-07-04 16:26:25,674 [INFO]   ema_rate: None
+2026-07-04 16:26:25,674 [INFO]   augment: True
+2026-07-04 16:26:25,674 [INFO]   num_workers: 2
+2026-07-04 16:26:25,674 [INFO]   grad_accum_steps: 2
+2026-07-04 16:26:25,675 [INFO]   output_dir: models\resshift_finetuned
+2026-07-04 16:26:25,675 [INFO]   seed: 42
+2026-07-04 16:26:25,675 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-04 16:26:25,675 [INFO]   log_level: INFO
+2026-07-04 16:26:25,675 [INFO] ============================================================
+2026-07-04 16:26:25,861 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-04 16:26:25,927 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 16:26:25,929 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-04 16:26:25,981 [INFO] Inicializando trainer...
+2026-07-04 16:26:30,137 [INFO] Iniciando entrenamiento por 8000 iteraciones...
+2026-07-12 18:34:26,904 [INFO] ============================================================
+2026-07-12 18:34:26,904 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-12 18:34:26,904 [INFO] ============================================================
+2026-07-12 18:34:26,905 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-12 18:34:26,905 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-12 18:34:26,905 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-12 18:34:26,905 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-12 18:34:26,905 [INFO]   scale: 4
+2026-07-12 18:34:26,905 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-12 18:34:26,905 [INFO]   pretrained_ckpt: None
+2026-07-12 18:34:26,905 [INFO]   iterations: 10000
+2026-07-12 18:34:26,906 [INFO]   batch_size: 2
+2026-07-12 18:34:26,906 [INFO]   lr: 5e-05
+2026-07-12 18:34:26,906 [INFO]   save_freq: 1000
+2026-07-12 18:34:26,906 [INFO]   val_freq: 1000
+2026-07-12 18:34:26,906 [INFO]   resume_from: None
+2026-07-12 18:34:26,906 [INFO]   tune_decoder: False
+2026-07-12 18:34:26,906 [INFO]   lora_tune_decoder: False
+2026-07-12 18:34:26,906 [INFO]   ema_rate: None
+2026-07-12 18:34:26,906 [INFO]   augment: True
+2026-07-12 18:34:26,906 [INFO]   num_workers: 2
+2026-07-12 18:34:26,906 [INFO]   grad_accum_steps: 2
+2026-07-12 18:34:26,906 [INFO]   output_dir: models\resshift_finetuned
+2026-07-12 18:34:26,907 [INFO]   seed: 42
+2026-07-12 18:34:26,907 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-12 18:34:26,907 [INFO]   log_level: INFO
+2026-07-12 18:34:26,907 [INFO] ============================================================
+2026-07-12 18:34:27,013 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-12 18:34:27,064 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-12 18:34:27,066 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-12 18:34:27,108 [INFO] Inicializando trainer...
+2026-07-12 18:34:30,349 [INFO] Iniciando entrenamiento por 10000 iteraciones...
+2026-07-12 18:34:30,354 [ERROR] Error en el entrenamiento: name 'SummaryWriter' is not defined
+2026-07-12 19:12:56,083 [INFO] ============================================================
+2026-07-12 19:12:56,083 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-12 19:12:56,083 [INFO] ============================================================
+2026-07-12 19:12:56,083 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-12 19:12:56,084 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-12 19:12:56,084 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-12 19:12:56,084 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-12 19:12:56,084 [INFO]   scale: 4
+2026-07-12 19:12:56,084 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-12 19:12:56,084 [INFO]   pretrained_ckpt: None
+2026-07-12 19:12:56,084 [INFO]   iterations: 20000
+2026-07-12 19:12:56,084 [INFO]   batch_size: 2
+2026-07-12 19:12:56,084 [INFO]   lr: 5e-05
+2026-07-12 19:12:56,084 [INFO]   save_freq: 2000
+2026-07-12 19:12:56,085 [INFO]   val_freq: 2000
+2026-07-12 19:12:56,085 [INFO]   resume_from: None
+2026-07-12 19:12:56,085 [INFO]   tune_decoder: False
+2026-07-12 19:12:56,085 [INFO]   lora_tune_decoder: False
+2026-07-12 19:12:56,085 [INFO]   ema_rate: None
+2026-07-12 19:12:56,085 [INFO]   augment: True
+2026-07-12 19:12:56,085 [INFO]   num_workers: 2
+2026-07-12 19:12:56,085 [INFO]   grad_accum_steps: 2
+2026-07-12 19:12:56,085 [INFO]   output_dir: models\resshift_finetuned
+2026-07-12 19:12:56,085 [INFO]   seed: 42
+2026-07-12 19:12:56,085 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-12 19:12:56,085 [INFO]   log_level: INFO
+2026-07-12 19:12:56,086 [INFO] ============================================================
+2026-07-12 19:12:56,192 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-12 19:12:56,244 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-12 19:12:56,245 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-12 19:12:56,287 [INFO] Inicializando trainer...
+2026-07-12 19:12:56,424 [ERROR] Error en el entrenamiento: numpy.core.multiarray failed to import
+2026-07-12 19:21:14,063 [INFO] ============================================================
+2026-07-12 19:21:14,064 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-12 19:21:14,064 [INFO] ============================================================
+2026-07-12 19:21:14,064 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-12 19:21:14,064 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-12 19:21:14,064 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-12 19:21:14,064 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-12 19:21:14,064 [INFO]   scale: 4
+2026-07-12 19:21:14,064 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-12 19:21:14,064 [INFO]   pretrained_ckpt: None
+2026-07-12 19:21:14,064 [INFO]   iterations: 20000
+2026-07-12 19:21:14,065 [INFO]   batch_size: 2
+2026-07-12 19:21:14,065 [INFO]   lr: 5e-05
+2026-07-12 19:21:14,065 [INFO]   save_freq: 2000
+2026-07-12 19:21:14,065 [INFO]   val_freq: 2000
+2026-07-12 19:21:14,065 [INFO]   resume_from: None
+2026-07-12 19:21:14,065 [INFO]   tune_decoder: False
+2026-07-12 19:21:14,065 [INFO]   lora_tune_decoder: False
+2026-07-12 19:21:14,065 [INFO]   ema_rate: None
+2026-07-12 19:21:14,065 [INFO]   augment: True
+2026-07-12 19:21:14,065 [INFO]   num_workers: 2
+2026-07-12 19:21:14,066 [INFO]   grad_accum_steps: 2
+2026-07-12 19:21:14,066 [INFO]   output_dir: models\resshift_finetuned
+2026-07-12 19:21:14,066 [INFO]   seed: 42
+2026-07-12 19:21:14,066 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-12 19:21:14,066 [INFO]   log_level: INFO
+2026-07-12 19:21:14,066 [INFO] ============================================================
+2026-07-12 19:21:14,174 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-12 19:21:14,226 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-12 19:21:14,228 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-12 19:21:14,264 [INFO] Inicializando trainer...
+2026-07-12 19:21:17,667 [ERROR] Error en el entrenamiento: Descriptors cannot be created directly.
+If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc >= 3.19.0.
+If you cannot immediately regenerate your protos, some other possible workarounds are:
+ 1. Downgrade the protobuf package to 3.20.x or lower.
+ 2. Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).
+
+More information: https://developers.google.com/protocol-buffers/docs/news/2022-05-06#python-updates
+2026-07-13 01:07:15,377 [INFO] ============================================================
+2026-07-13 01:07:15,856 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-13 01:07:15,856 [INFO] ============================================================
+2026-07-13 01:07:15,856 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-13 01:07:15,856 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-13 01:07:15,856 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-13 01:07:15,856 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-13 01:07:15,856 [INFO]   scale: 4
+2026-07-13 01:07:15,856 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-13 01:07:15,856 [INFO]   pretrained_ckpt: None
+2026-07-13 01:07:15,856 [INFO]   iterations: 20000
+2026-07-13 01:07:15,856 [INFO]   batch_size: 2
+2026-07-13 01:07:15,856 [INFO]   lr: 5e-05
+2026-07-13 01:07:15,856 [INFO]   save_freq: 2000
+2026-07-13 01:07:15,856 [INFO]   val_freq: 2000
+2026-07-13 01:07:15,856 [INFO]   resume_from: None
+2026-07-13 01:07:15,857 [INFO]   tune_decoder: False
+2026-07-13 01:07:15,857 [INFO]   lora_tune_decoder: False
+2026-07-13 01:07:15,857 [INFO]   ema_rate: None
+2026-07-13 01:07:15,857 [INFO]   augment: True
+2026-07-13 01:07:15,857 [INFO]   num_workers: 2
+2026-07-13 01:07:15,857 [INFO]   grad_accum_steps: 2
+2026-07-13 01:07:15,857 [INFO]   output_dir: models\resshift_finetuned
+2026-07-13 01:07:15,857 [INFO]   seed: 42
+2026-07-13 01:07:15,857 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-13 01:07:15,857 [INFO]   log_level: INFO
+2026-07-13 01:07:15,857 [INFO] ============================================================
+2026-07-13 01:07:15,969 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-13 01:07:16,044 [INFO] YAML de finetune generado en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-13 01:07:16,046 [INFO] Cargando configuración desde: models\resshift_finetuned\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-13 01:07:16,088 [INFO] Inicializando trainer...
+2026-07-13 01:07:19,508 [INFO] Iniciando entrenamiento por 20000 iteraciones...
+2026-07-13 01:07:22,286 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-13 06:58:55,930 [INFO] Entrenamiento completado. Checkpoints en: models\resshift_finetuned\resshift_fold_2_s15_lr5e5
+2026-07-17 20:58:10,130 [INFO] ============================================================
+2026-07-17 20:58:10,130 [INFO] ENTRENAMIENTO/FINETUNE — ResShift
+2026-07-17 20:58:10,130 [INFO] ============================================================
+2026-07-17 20:58:10,130 [INFO]   hr_dir: data\sr_kfold\fold_2\train\hr
+2026-07-17 20:58:10,130 [INFO]   lr_dir: data\sr_kfold\fold_2\train\lr
+2026-07-17 20:58:10,130 [INFO]   val_hr_dir: data\sr_kfold\fold_2\val\hr
+2026-07-17 20:58:10,130 [INFO]   val_lr_dir: data\sr_kfold\fold_2\val\lr
+2026-07-17 20:58:10,130 [INFO]   scale: 4
+2026-07-17 20:58:10,130 [INFO]   config: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-17 20:58:10,130 [INFO]   pretrained_ckpt: C:\TFM\ResShift\weights\resshift_realsrx4_s15_v1.pth
+2026-07-17 20:58:10,130 [INFO]   iterations: 10000
+2026-07-17 20:58:10,130 [INFO]   batch_size: 2
+2026-07-17 20:58:10,130 [INFO]   lr: 5e-05
+2026-07-17 20:58:10,130 [INFO]   save_freq: 5000
+2026-07-17 20:58:10,130 [INFO]   val_freq: 5000
+2026-07-17 20:58:10,130 [INFO]   resume_from: None
+2026-07-17 20:58:10,130 [INFO]   tune_decoder: False
+2026-07-17 20:58:10,130 [INFO]   lora_tune_decoder: False
+2026-07-17 20:58:10,130 [INFO]   ema_rate: None
+2026-07-17 20:58:10,130 [INFO]   augment: True
+2026-07-17 20:58:10,130 [INFO]   num_workers: 2
+2026-07-17 20:58:10,130 [INFO]   grad_accum_steps: 2
+2026-07-17 20:58:10,130 [INFO]   output_dir: E:\temp
+2026-07-17 20:58:10,130 [INFO]   seed: 42
+2026-07-17 20:58:10,130 [INFO]   exp_name: resshift_fold_2_s15_lr5e5
+2026-07-17 20:58:10,130 [INFO]   log_level: INFO
+2026-07-17 20:58:10,130 [INFO] ============================================================
+2026-07-17 20:58:10,240 [INFO] Config base: ResShift\configs\realsr_swinunet_realesrgan256.yaml
+2026-07-17 20:58:10,505 [INFO] YAML de finetune generado en: E:\temp\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-17 20:58:10,505 [INFO] Cargando configuración desde: E:\temp\resshift_fold_2_s15_lr5e5\finetune_config.yaml
+2026-07-17 20:58:10,552 [INFO] Inicializando trainer...
+2026-07-17 20:58:13,889 [INFO] Iniciando entrenamiento por 10000 iteraciones...
+2026-07-17 20:58:15,161 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-17 23:40:02,769 [INFO] Entrenamiento completado. Checkpoints en: E:\temp\resshift_fold_2_s15_lr5e5

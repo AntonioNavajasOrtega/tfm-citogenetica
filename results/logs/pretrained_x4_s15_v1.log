@@ -1,0 +1,93 @@
+2026-07-04 02:29:38,055 [INFO] ============================================================
+2026-07-04 02:29:38,055 [INFO] INFERENCIA — ResShift
+2026-07-04 02:29:38,056 [INFO] ============================================================
+2026-07-04 02:29:38,056 [INFO]   input_dir: data\sr_dataset\HR
+2026-07-04 02:29:38,056 [INFO]   output_dir: results\sr_pretrained
+2026-07-04 02:29:38,056 [INFO]   checkpoint: None
+2026-07-04 02:29:38,056 [INFO]   scale: 4
+2026-07-04 02:29:38,056 [INFO]   version: v1
+2026-07-04 02:29:38,056 [INFO]   steps: 15
+2026-07-04 02:29:38,056 [INFO]   chop_size: 512
+2026-07-04 02:29:38,057 [INFO]   seed: 42
+2026-07-04 02:29:38,057 [INFO]   exp_name: pretrained_x4_s15_v1
+2026-07-04 02:29:38,057 [INFO]   log_level: INFO
+2026-07-04 02:29:38,057 [INFO] ============================================================
+2026-07-04 02:29:38,063 [INFO] Imágenes a procesar: 2410
+2026-07-04 02:29:41,663 [INFO] Descargando checkpoint oficial: resshift_realsrx4_s15_v1.pth ...
+2026-07-04 02:30:05,725 [INFO] Chop size/stride: 512/448
+2026-07-04 02:30:06,212 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-04 02:30:08,517 [INFO] Iniciando inferencia ResShift...
+2026-07-05 21:15:03,361 [INFO] ============================================================
+2026-07-05 21:15:03,362 [INFO] INFERENCIA — ResShift
+2026-07-05 21:15:03,363 [INFO] ============================================================
+2026-07-05 21:15:03,363 [INFO]   input_dir: data\sr_dataset\HR
+2026-07-05 21:15:03,363 [INFO]   output_dir: results\sr_pretrained
+2026-07-05 21:15:03,363 [INFO]   checkpoint: None
+2026-07-05 21:15:03,363 [INFO]   scale: 4
+2026-07-05 21:15:03,363 [INFO]   version: v1
+2026-07-05 21:15:03,363 [INFO]   steps: 15
+2026-07-05 21:15:03,363 [INFO]   chop_size: 64
+2026-07-05 21:15:03,363 [INFO]   seed: 42
+2026-07-05 21:15:03,364 [INFO]   exp_name: pretrained_x4_s15_v1
+2026-07-05 21:15:03,364 [INFO]   log_level: INFO
+2026-07-05 21:15:03,364 [INFO] ============================================================
+2026-07-05 21:15:03,370 [INFO] Imágenes a procesar: 2410
+2026-07-05 21:15:07,172 [INFO] Checkpoint oficial ya presente: C:\TFM\ResShift\weights\resshift_realsrx4_s15_v1.pth
+2026-07-05 21:15:07,173 [INFO] Chop size/stride: 64/0
+2026-07-05 21:15:07,683 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-05 21:15:11,341 [INFO] Iniciando inferencia ResShift...
+2026-07-05 21:19:56,128 [INFO] ============================================================
+2026-07-05 21:19:56,128 [INFO] INFERENCIA — ResShift
+2026-07-05 21:19:56,128 [INFO] ============================================================
+2026-07-05 21:19:56,128 [INFO]   input_dir: data\sr_dataset\HR
+2026-07-05 21:19:56,128 [INFO]   output_dir: results\sr_pretrained
+2026-07-05 21:19:56,129 [INFO]   checkpoint: None
+2026-07-05 21:19:56,129 [INFO]   scale: 4
+2026-07-05 21:19:56,129 [INFO]   version: v1
+2026-07-05 21:19:56,129 [INFO]   steps: 15
+2026-07-05 21:19:56,129 [INFO]   chop_size: 256
+2026-07-05 21:19:56,129 [INFO]   seed: 42
+2026-07-05 21:19:56,129 [INFO]   exp_name: pretrained_x4_s15_v1
+2026-07-05 21:19:56,129 [INFO]   log_level: INFO
+2026-07-05 21:19:56,129 [INFO] ============================================================
+2026-07-05 21:19:56,137 [INFO] Imágenes a procesar: 2410
+2026-07-05 21:20:00,710 [INFO] Checkpoint oficial ya presente: C:\TFM\ResShift\weights\resshift_realsrx4_s15_v1.pth
+2026-07-05 21:20:00,711 [INFO] Chop size/stride: 256/192
+2026-07-05 21:20:01,320 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-05 21:20:04,307 [INFO] Iniciando inferencia ResShift...
+2026-07-05 22:17:53,873 [INFO] ============================================================
+2026-07-05 22:17:53,874 [INFO] INFERENCIA — ResShift
+2026-07-05 22:17:53,874 [INFO] ============================================================
+2026-07-05 22:17:53,874 [INFO]   input_dir: data\sr_dataset\HR
+2026-07-05 22:17:53,874 [INFO]   output_dir: results\sr_pretrained
+2026-07-05 22:17:53,874 [INFO]   checkpoint: None
+2026-07-05 22:17:53,874 [INFO]   scale: 4
+2026-07-05 22:17:53,876 [INFO]   version: v1
+2026-07-05 22:17:53,876 [INFO]   steps: 15
+2026-07-05 22:17:53,876 [INFO]   chop_size: 256
+2026-07-05 22:17:53,876 [INFO]   seed: 42
+2026-07-05 22:17:53,876 [INFO]   exp_name: pretrained_x4_s15_v1
+2026-07-05 22:17:53,876 [INFO]   log_level: INFO
+2026-07-05 22:17:53,876 [INFO] ============================================================
+2026-07-05 22:17:53,884 [INFO] Imágenes a procesar: 2410
+2026-07-05 22:17:57,659 [INFO] Checkpoint oficial ya presente: C:\TFM\ResShift\weights\resshift_realsrx4_s15_v1.pth
+2026-07-05 22:17:57,660 [INFO] Chop size/stride: 256/192
+2026-07-05 22:17:58,157 [WARNING] A matching Triton is not available, some optimizations will not be enabled
+Traceback (most recent call last):
+  File "E:\Anaconda\envs\resshift\lib\site-packages\xformers\__init__.py", line 57, in _is_triton_available
+    import triton  # noqa
+ModuleNotFoundError: No module named 'triton'
+2026-07-05 22:18:00,652 [INFO] Iniciando inferencia ResShift...
+2026-07-05 23:09:26,851 [INFO] Inferencia completada. Resultados en: results\sr_pretrained\pretrained_x4_s15_v1
