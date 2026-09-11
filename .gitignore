@@ -1,0 +1,46 @@
+# --- Entorno virtual Python ---
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+data/
+runs/
+results/
+temporary/
+models/
+
+
+# --- Caché de HuggingFace / transformers ---
+.cache/
+~/.cache/huggingface/
+
+# --- Jupyter / IPython ---
+.ipynb_checkpoints/
+*.ipynb
+
+# --- IDEs ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Archivos temporales ---
+*.tmp
+*.temp
+*.swp
+*.bak
+tmp/
+temp/
+
+# --- pip ---
+*.egg-info/
+dist/
+build/
