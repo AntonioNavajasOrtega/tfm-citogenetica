@@ -11,7 +11,7 @@ data/
 runs/
 results/
 temporary/
-models/
+
 
 
 # --- Caché de HuggingFace / transformers ---

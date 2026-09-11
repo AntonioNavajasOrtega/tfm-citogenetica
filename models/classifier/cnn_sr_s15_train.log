@@ -1,0 +1,418 @@
+2026-07-09 21:55:19,889 [INFO] ============================================================
+2026-07-09 21:55:19,889 [INFO] ENTRENAMIENTO CLASIFICADOR: sr_s15
+2026-07-09 21:55:19,889 [INFO] Folds detectados: ['fold_0', 'fold_1', 'fold_2', 'fold_3', 'fold_4']
+2026-07-09 21:55:19,889 [INFO] Device: cuda:0
+2026-07-09 21:55:19,889 [INFO] Early stopping patience: 7
+2026-07-09 21:55:19,889 [INFO] ============================================================
+2026-07-09 21:55:19,889 [INFO] 
+--- FOLD_0 ---
+2026-07-09 21:55:19,895 [INFO] Clases: ['dicentric', 'normal'] | train=1925 | val=485
+2026-07-09 21:55:45,345 [INFO] Fold 0 - Epoch 0/24 | Val Loss: 0.1919 Acc: 0.9443
+2026-07-09 21:56:35,595 [INFO] Fold 0 - Epoch 5/24 | Val Loss: 0.1342 Acc: 0.9443
+2026-07-09 21:57:26,061 [INFO] Fold 0 - Epoch 10/24 | Val Loss: 0.1465 Acc: 0.9464
+2026-07-09 21:58:16,561 [INFO] Fold 0 - Epoch 15/24 | Val Loss: 0.1575 Acc: 0.9381
+2026-07-09 21:59:06,919 [INFO] Fold 0 - Epoch 20/24 | Val Loss: 0.1314 Acc: 0.9464
+2026-07-09 21:59:16,936 [INFO] Fold 0 - Early stopping en la época 21 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 21:59:16,936 [INFO] Fold 0 - Entrenamiento completado en 3m 57s
+2026-07-09 21:59:16,936 [INFO] Fold 0 - Mejor Val Acc: 0.9546 (época 14)
+2026-07-09 21:59:17,068 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold0.pth
+2026-07-09 21:59:17,068 [INFO] 
+--- FOLD_1 ---
+2026-07-09 21:59:17,088 [INFO] Clases: ['dicentric', 'normal'] | train=1930 | val=480
+2026-07-09 21:59:41,944 [INFO] Fold 1 - Epoch 0/24 | Val Loss: 0.1928 Acc: 0.9375
+2026-07-09 22:00:32,316 [INFO] Fold 1 - Epoch 5/24 | Val Loss: 0.1874 Acc: 0.9458
+2026-07-09 22:01:02,405 [INFO] Fold 1 - Early stopping en la época 8 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 22:01:02,405 [INFO] Fold 1 - Entrenamiento completado en 1m 45s
+2026-07-09 22:01:02,405 [INFO] Fold 1 - Mejor Val Acc: 0.9542 (época 1)
+2026-07-09 22:01:02,549 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold1.pth
+2026-07-09 22:01:02,549 [INFO] 
+--- FOLD_2 ---
+2026-07-09 22:01:02,549 [INFO] Clases: ['dicentric', 'normal'] | train=1933 | val=477
+2026-07-09 22:01:27,348 [INFO] Fold 2 - Epoch 0/24 | Val Loss: 0.3502 Acc: 0.9413
+2026-07-09 22:02:17,529 [INFO] Fold 2 - Epoch 5/24 | Val Loss: 0.1421 Acc: 0.9602
+2026-07-09 22:03:07,836 [INFO] Fold 2 - Epoch 10/24 | Val Loss: 0.1559 Acc: 0.9581
+2026-07-09 22:03:47,801 [INFO] Fold 2 - Early stopping en la época 14 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 22:03:47,801 [INFO] Fold 2 - Entrenamiento completado en 2m 45s
+2026-07-09 22:03:47,801 [INFO] Fold 2 - Mejor Val Acc: 0.9644 (época 7)
+2026-07-09 22:03:47,927 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold2.pth
+2026-07-09 22:03:47,927 [INFO] 
+--- FOLD_3 ---
+2026-07-09 22:03:47,943 [INFO] Clases: ['dicentric', 'normal'] | train=1927 | val=483
+2026-07-09 22:04:12,734 [INFO] Fold 3 - Epoch 0/24 | Val Loss: 2.8493 Acc: 0.9524
+2026-07-09 22:05:02,911 [INFO] Fold 3 - Epoch 5/24 | Val Loss: 0.2155 Acc: 0.9524
+2026-07-09 22:05:23,023 [INFO] Fold 3 - Early stopping en la época 7 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 22:05:23,023 [INFO] Fold 3 - Entrenamiento completado en 1m 35s
+2026-07-09 22:05:23,023 [INFO] Fold 3 - Mejor Val Acc: 0.9524 (época 0)
+2026-07-09 22:05:23,160 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold3.pth
+2026-07-09 22:05:23,160 [INFO] 
+--- FOLD_4 ---
+2026-07-09 22:05:23,175 [INFO] Clases: ['dicentric', 'normal'] | train=1925 | val=485
+2026-07-09 22:05:47,770 [INFO] Fold 4 - Epoch 0/24 | Val Loss: 0.2336 Acc: 0.9423
+2026-07-09 22:06:38,239 [INFO] Fold 4 - Epoch 5/24 | Val Loss: 0.1659 Acc: 0.9402
+2026-07-09 22:07:18,418 [INFO] Fold 4 - Early stopping en la época 9 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 22:07:18,418 [INFO] Fold 4 - Entrenamiento completado en 1m 55s
+2026-07-09 22:07:18,418 [INFO] Fold 4 - Mejor Val Acc: 0.9464 (época 2)
+2026-07-09 22:07:18,544 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold4.pth
+2026-07-09 22:07:18,544 [INFO] 
+[OK] Historial completo (todas las épocas, todos los folds) guardado en: models\classifier\cnn_sr_s15_metrics.json
+2026-07-09 22:07:18,544 [INFO] [OK] Resumen por fold guardado en: models\classifier\cnn_sr_s15_summary.csv
+2026-07-09 22:07:18,544 [INFO] [INFO] Val Acc media entre folds: 0.9544 (+/- 0.0058)
+2026-07-09 22:07:18,544 [INFO] 
+[INFO] Entrenamiento K-Fold de Clasificador completado.
+2026-07-09 23:14:47,096 [INFO] ============================================================
+2026-07-09 23:14:47,096 [INFO] ENTRENAMIENTO CLASIFICADOR: sr_s15
+2026-07-09 23:14:47,096 [INFO] Folds detectados: ['fold_0', 'fold_1', 'fold_2', 'fold_3', 'fold_4']
+2026-07-09 23:14:47,096 [INFO] Device: cuda:0
+2026-07-09 23:14:47,096 [INFO] Early stopping patience: 7
+2026-07-09 23:14:47,096 [INFO] ============================================================
+2026-07-09 23:14:47,096 [INFO] 
+--- FOLD_0 ---
+2026-07-09 23:14:47,112 [INFO] Clases: ['dicentric', 'normal'] | train=1925 | val=485
+2026-07-09 23:14:47,112 [INFO] Distribución train: {'dicentric': 97, 'normal': 1828}
+2026-07-09 23:14:47,112 [INFO] Distribución val:   {'dicentric': 27, 'normal': 458}
+2026-07-09 23:14:47,112 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.0% del total (97/1925). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-09 23:14:47,368 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.922680854797363, 'normal': 0.5265317559242249}
+2026-07-09 23:14:58,383 [INFO] Fold 0 - Epoch 0/24 | Val Loss: 1.8452 Acc: 0.1588 | dicentric: recall=0.370 f1=0.047, normal: recall=0.146 f1=0.247
+2026-07-09 23:15:49,159 [INFO] Fold 0 - Epoch 5/24 | Val Loss: 0.5396 Acc: 0.8845 | dicentric: recall=0.296 f1=0.222, normal: recall=0.919 f1=0.938
+2026-07-09 23:16:39,148 [INFO] Fold 0 - Epoch 10/24 | Val Loss: 0.6668 Acc: 0.6680 | dicentric: recall=0.889 f1=0.230, normal: recall=0.655 f1=0.788
+2026-07-09 23:16:49,186 [INFO] Fold 0 - Early stopping en la época 11 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 23:16:49,186 [INFO] Fold 0 - Entrenamiento completado en 2m 2s
+2026-07-09 23:16:49,186 [INFO] Fold 0 - Mejor Val Acc: 0.9443 (época 4)
+2026-07-09 23:16:49,186 [INFO] Fold 0 - [dicentric] precision=0.5000 recall=0.3333 f1=0.4000 support=27
+2026-07-09 23:16:49,186 [INFO] Fold 0 - [normal] precision=0.9615 recall=0.9803 f1=0.9708 support=458
+2026-07-09 23:16:49,186 [INFO] Fold 0 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[9, 18], [9, 449]]
+2026-07-09 23:16:49,329 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold0.pth
+2026-07-09 23:16:49,329 [INFO] 
+--- FOLD_1 ---
+2026-07-09 23:16:49,349 [INFO] Clases: ['dicentric', 'normal'] | train=1930 | val=480
+2026-07-09 23:16:49,349 [INFO] Distribución train: {'dicentric': 98, 'normal': 1832}
+2026-07-09 23:16:49,350 [INFO] Distribución val:   {'dicentric': 26, 'normal': 454}
+2026-07-09 23:16:49,350 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.1% del total (98/1930). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-09 23:16:49,502 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.846939086914062, 'normal': 0.5267467498779297}
+2026-07-09 23:16:59,863 [INFO] Fold 1 - Epoch 0/24 | Val Loss: 0.2014 Acc: 0.9396 | dicentric: recall=0.000 f1=0.000, normal: recall=0.993 f1=0.969
+2026-07-09 23:17:50,182 [INFO] Fold 1 - Epoch 5/24 | Val Loss: 0.1853 Acc: 0.9521 | dicentric: recall=0.346 f1=0.439, normal: recall=0.987 f1=0.975
+2026-07-09 23:18:40,453 [INFO] Fold 1 - Epoch 10/24 | Val Loss: 0.2354 Acc: 0.9208 | dicentric: recall=0.577 f1=0.441, normal: recall=0.941 f1=0.957
+2026-07-09 23:19:00,530 [INFO] Fold 1 - Early stopping en la época 12 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 23:19:00,530 [INFO] Fold 1 - Entrenamiento completado en 2m 11s
+2026-07-09 23:19:00,530 [INFO] Fold 1 - Mejor Val Acc: 0.9521 (época 5)
+2026-07-09 23:19:00,530 [INFO] Fold 1 - [dicentric] precision=0.6000 recall=0.3462 f1=0.4390 support=26
+2026-07-09 23:19:00,530 [INFO] Fold 1 - [normal] precision=0.9634 recall=0.9868 f1=0.9750 support=454
+2026-07-09 23:19:00,530 [INFO] Fold 1 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[9, 17], [6, 448]]
+2026-07-09 23:19:00,672 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold1.pth
+2026-07-09 23:19:00,672 [INFO] 
+--- FOLD_2 ---
+2026-07-09 23:19:00,682 [INFO] Clases: ['dicentric', 'normal'] | train=1933 | val=477
+2026-07-09 23:19:00,682 [INFO] Distribución train: {'dicentric': 104, 'normal': 1829}
+2026-07-09 23:19:00,682 [INFO] Distribución val:   {'dicentric': 20, 'normal': 457}
+2026-07-09 23:19:00,682 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.4% del total (104/1933). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-09 23:19:00,833 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.293269157409668, 'normal': 0.5284308195114136}
+2026-07-09 23:19:11,257 [INFO] Fold 2 - Epoch 0/24 | Val Loss: 0.3408 Acc: 0.8637 | dicentric: recall=0.600 f1=0.270, normal: recall=0.875 f1=0.925
+2026-07-09 23:20:01,763 [INFO] Fold 2 - Epoch 5/24 | Val Loss: 0.2711 Acc: 0.9078 | dicentric: recall=0.300 f1=0.214, normal: recall=0.934 f1=0.951
+2026-07-09 23:20:51,840 [INFO] Fold 2 - Epoch 10/24 | Val Loss: 0.2204 Acc: 0.9539 | dicentric: recall=0.200 f1=0.267, normal: recall=0.987 f1=0.976
+2026-07-09 23:21:42,281 [INFO] Fold 2 - Epoch 15/24 | Val Loss: 0.1950 Acc: 0.9434 | dicentric: recall=0.500 f1=0.426, normal: recall=0.963 f1=0.970
+2026-07-09 23:22:02,358 [INFO] Fold 2 - Early stopping en la época 17 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 23:22:02,358 [INFO] Fold 2 - Entrenamiento completado en 3m 2s
+2026-07-09 23:22:02,358 [INFO] Fold 2 - Mejor Val Acc: 0.9539 (época 10)
+2026-07-09 23:22:02,358 [INFO] Fold 2 - [dicentric] precision=0.4000 recall=0.2000 f1=0.2667 support=20
+2026-07-09 23:22:02,358 [INFO] Fold 2 - [normal] precision=0.9657 recall=0.9869 f1=0.9762 support=457
+2026-07-09 23:22:02,358 [INFO] Fold 2 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[4, 16], [6, 451]]
+2026-07-09 23:22:02,497 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold2.pth
+2026-07-09 23:22:02,497 [INFO] 
+--- FOLD_3 ---
+2026-07-09 23:22:02,508 [INFO] Clases: ['dicentric', 'normal'] | train=1927 | val=483
+2026-07-09 23:22:02,508 [INFO] Distribución train: {'dicentric': 101, 'normal': 1826}
+2026-07-09 23:22:02,508 [INFO] Distribución val:   {'dicentric': 23, 'normal': 460}
+2026-07-09 23:22:02,508 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.2% del total (101/1927). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-09 23:22:02,656 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.539604187011719, 'normal': 0.527656078338623}
+2026-07-09 23:22:13,078 [INFO] Fold 3 - Epoch 0/24 | Val Loss: 0.2541 Acc: 0.8965 | dicentric: recall=0.609 f1=0.359, normal: recall=0.911 f1=0.944
+2026-07-09 23:23:03,693 [INFO] Fold 3 - Epoch 5/24 | Val Loss: 0.3171 Acc: 0.8923 | dicentric: recall=0.565 f1=0.333, normal: recall=0.909 f1=0.941
+2026-07-09 23:23:53,809 [INFO] Fold 3 - Epoch 10/24 | Val Loss: 0.2200 Acc: 0.9089 | dicentric: recall=0.261 f1=0.214, normal: recall=0.941 f1=0.952
+2026-07-09 23:23:53,809 [INFO] Fold 3 - Early stopping en la época 10 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 23:23:53,809 [INFO] Fold 3 - Entrenamiento completado en 1m 51s
+2026-07-09 23:23:53,811 [INFO] Fold 3 - Mejor Val Acc: 0.9462 (época 3)
+2026-07-09 23:23:53,811 [INFO] Fold 3 - [dicentric] precision=0.0000 recall=0.0000 f1=0.0000 support=23
+2026-07-09 23:23:53,811 [INFO] Fold 3 - [normal] precision=0.9521 recall=0.9935 f1=0.9723 support=460
+2026-07-09 23:23:53,811 [INFO] Fold 3 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[0, 23], [3, 457]]
+2026-07-09 23:23:53,940 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold3.pth
+2026-07-09 23:23:53,940 [INFO] 
+--- FOLD_4 ---
+2026-07-09 23:23:53,955 [INFO] Clases: ['dicentric', 'normal'] | train=1925 | val=485
+2026-07-09 23:23:53,955 [INFO] Distribución train: {'dicentric': 96, 'normal': 1829}
+2026-07-09 23:23:53,955 [INFO] Distribución val:   {'dicentric': 28, 'normal': 457}
+2026-07-09 23:23:53,955 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.0% del total (96/1925). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-09 23:23:54,109 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 10.026041984558105, 'normal': 0.5262438654899597}
+2026-07-09 23:24:04,435 [INFO] Fold 4 - Epoch 0/24 | Val Loss: 0.7473 Acc: 0.6763 | dicentric: recall=0.679 f1=0.195, normal: recall=0.676 f1=0.797
+2026-07-09 23:24:54,958 [INFO] Fold 4 - Epoch 5/24 | Val Loss: 0.3714 Acc: 0.8474 | dicentric: recall=0.714 f1=0.351, normal: recall=0.856 f1=0.914
+2026-07-09 23:25:35,339 [INFO] Fold 4 - Early stopping en la época 9 (sin mejora en val_acc durante 7 épocas seguidas).
+2026-07-09 23:25:35,339 [INFO] Fold 4 - Entrenamiento completado en 1m 41s
+2026-07-09 23:25:35,339 [INFO] Fold 4 - Mejor Val Acc: 0.9361 (época 2)
+2026-07-09 23:25:35,339 [INFO] Fold 4 - [dicentric] precision=0.4483 recall=0.4643 f1=0.4561 support=28
+2026-07-09 23:25:35,339 [INFO] Fold 4 - [normal] precision=0.9671 recall=0.9650 f1=0.9660 support=457
+2026-07-09 23:25:35,339 [INFO] Fold 4 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[13, 15], [16, 441]]
+2026-07-09 23:25:35,464 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold4.pth
+2026-07-09 23:25:35,481 [INFO] 
+[OK] Historial completo (todas las épocas, todos los folds) guardado en: models\classifier\cnn_sr_s15_metrics.json
+2026-07-09 23:25:35,481 [INFO] [OK] Resumen por fold guardado en: models\classifier\cnn_sr_s15_summary.csv
+2026-07-09 23:25:35,481 [INFO] [INFO] Val Acc media entre folds: 0.9465 (+/- 0.0063)
+2026-07-09 23:25:35,483 [INFO] [INFO] [dicentric] Recall medio: 0.2688 (+/- 0.1583) | F1 medio: 0.3124 (+/- 0.1697)
+2026-07-09 23:25:35,483 [INFO] [INFO] [normal] Recall medio: 0.9825 (+/- 0.0097) | F1 medio: 0.9721 (+/- 0.0036)
+2026-07-09 23:25:35,484 [INFO] 
+[INFO] Entrenamiento K-Fold de Clasificador completado.
+2026-07-11 12:31:37,662 [INFO] ============================================================
+2026-07-11 12:31:37,662 [INFO] ENTRENAMIENTO CLASIFICADOR: sr_s15
+2026-07-11 12:31:37,662 [INFO] Folds detectados: ['fold_0', 'fold_1', 'fold_2', 'fold_3', 'fold_4']
+2026-07-11 12:31:37,663 [INFO] Device: cuda:0
+2026-07-11 12:31:37,663 [INFO] Early stopping patience: 7
+2026-07-11 12:31:37,663 [INFO] ============================================================
+2026-07-11 12:31:37,663 [INFO] 
+--- FOLD_0 ---
+2026-07-11 12:31:37,673 [INFO] Clases: ['dicentric', 'normal'] | train=1925 | val=485
+2026-07-11 12:31:37,674 [INFO] Distribución train: {'dicentric': 97, 'normal': 1828}
+2026-07-11 12:31:37,674 [INFO] Distribución val:   {'dicentric': 27, 'normal': 458}
+2026-07-11 12:31:37,674 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.0% del total (97/1925). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 12:31:37,675 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 12:31:37,995 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.922680854797363, 'normal': 0.5265317559242249}
+2026-07-11 12:31:37,996 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 12:31:52,682 [INFO] Fold 0 - Epoch 0/24 | Val Loss: 1.2261 Acc: 0.4000 | dicentric: recall=0.963 f1=0.152, normal: recall=0.367 f1=0.536 | [dicentric_f1=0.1516]
+2026-07-11 12:32:55,880 [INFO] Fold 0 - Epoch 5/24 | Val Loss: 0.5093 Acc: 0.8206 | dicentric: recall=0.963 f1=0.374, normal: recall=0.812 f1=0.895 | [dicentric_f1=0.3741]
+2026-07-11 12:33:57,759 [INFO] Fold 0 - Epoch 10/24 | Val Loss: 0.3969 Acc: 0.8701 | dicentric: recall=0.889 f1=0.432, normal: recall=0.869 f1=0.927 | [dicentric_f1=0.4324]
+2026-07-11 12:34:58,795 [INFO] Fold 0 - Epoch 15/24 | Val Loss: 0.3894 Acc: 0.8948 | dicentric: recall=0.778 f1=0.452, normal: recall=0.902 f1=0.942 | [dicentric_f1=0.4516]
+2026-07-11 12:35:59,950 [INFO] Fold 0 - Epoch 20/24 | Val Loss: 0.2591 Acc: 0.9464 | dicentric: recall=0.815 f1=0.629, normal: recall=0.954 f1=0.971 | [dicentric_f1=0.6286]
+2026-07-11 12:36:48,842 [INFO] Fold 0 - Epoch 24/24 | Val Loss: 0.3251 Acc: 0.9155 | dicentric: recall=0.889 f1=0.539, normal: recall=0.917 f1=0.953 | [dicentric_f1=0.5393]
+2026-07-11 12:36:48,843 [INFO] Fold 0 - Entrenamiento completado en 5m 11s
+2026-07-11 12:36:48,843 [INFO] Fold 0 - Mejor dicentric_f1: 0.6562 (época 19, acc global en esa época: 0.9546)
+2026-07-11 12:36:48,843 [INFO] Fold 0 - [dicentric] precision=0.5676 recall=0.7778 f1=0.6562 support=27
+2026-07-11 12:36:48,843 [INFO] Fold 0 - [normal] precision=0.9866 recall=0.9651 f1=0.9757 support=458
+2026-07-11 12:36:48,843 [INFO] Fold 0 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[21, 6], [16, 442]]
+2026-07-11 12:36:49,000 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold0.pth
+2026-07-11 12:36:49,000 [INFO] 
+--- FOLD_1 ---
+2026-07-11 12:36:49,009 [INFO] Clases: ['dicentric', 'normal'] | train=1930 | val=480
+2026-07-11 12:36:49,009 [INFO] Distribución train: {'dicentric': 98, 'normal': 1832}
+2026-07-11 12:36:49,010 [INFO] Distribución val:   {'dicentric': 26, 'normal': 454}
+2026-07-11 12:36:49,010 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.1% del total (98/1930). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 12:36:49,011 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 12:36:49,184 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.846939086914062, 'normal': 0.5267467498779297}
+2026-07-11 12:36:49,186 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 12:37:02,667 [INFO] Fold 1 - Epoch 0/24 | Val Loss: 1.3245 Acc: 0.4437 | dicentric: recall=1.000 f1=0.163, normal: recall=0.412 f1=0.583 | [dicentric_f1=0.1630]
+2026-07-11 12:38:04,683 [INFO] Fold 1 - Epoch 5/24 | Val Loss: 0.4349 Acc: 0.8604 | dicentric: recall=0.692 f1=0.350, normal: recall=0.870 f1=0.922 | [dicentric_f1=0.3495]
+2026-07-11 12:39:06,018 [INFO] Fold 1 - Epoch 10/24 | Val Loss: 0.2250 Acc: 0.9271 | dicentric: recall=0.654 f1=0.493, normal: recall=0.943 f1=0.961 | [dicentric_f1=0.4928]
+2026-07-11 12:40:07,284 [INFO] Fold 1 - Epoch 15/24 | Val Loss: 0.2390 Acc: 0.9271 | dicentric: recall=0.654 f1=0.493, normal: recall=0.943 f1=0.961 | [dicentric_f1=0.4928]
+2026-07-11 12:41:08,070 [INFO] Fold 1 - Epoch 20/24 | Val Loss: 0.2625 Acc: 0.9146 | dicentric: recall=0.731 f1=0.481, normal: recall=0.925 f1=0.953 | [dicentric_f1=0.4810]
+2026-07-11 12:41:56,989 [INFO] Fold 1 - Epoch 24/24 | Val Loss: 0.1579 Acc: 0.9604 | dicentric: recall=0.692 f1=0.655, normal: recall=0.976 f1=0.979 | [dicentric_f1=0.6545]
+2026-07-11 12:41:57,061 [INFO] Fold 1 - Entrenamiento completado en 5m 8s
+2026-07-11 12:41:57,062 [INFO] Fold 1 - Mejor dicentric_f1: 0.6545 (época 24, acc global en esa época: 0.9604)
+2026-07-11 12:41:57,062 [INFO] Fold 1 - [dicentric] precision=0.6207 recall=0.6923 f1=0.6545 support=26
+2026-07-11 12:41:57,062 [INFO] Fold 1 - [normal] precision=0.9823 recall=0.9758 f1=0.9790 support=454
+2026-07-11 12:41:57,062 [INFO] Fold 1 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[18, 8], [11, 443]]
+2026-07-11 12:41:57,212 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold1.pth
+2026-07-11 12:41:57,212 [INFO] 
+--- FOLD_2 ---
+2026-07-11 12:41:57,221 [INFO] Clases: ['dicentric', 'normal'] | train=1933 | val=477
+2026-07-11 12:41:57,221 [INFO] Distribución train: {'dicentric': 104, 'normal': 1829}
+2026-07-11 12:41:57,221 [INFO] Distribución val:   {'dicentric': 20, 'normal': 457}
+2026-07-11 12:41:57,221 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.4% del total (104/1933). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 12:41:57,222 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 12:41:57,399 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.293269157409668, 'normal': 0.5284308195114136}
+2026-07-11 12:41:57,401 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 12:42:11,174 [INFO] Fold 2 - Epoch 0/24 | Val Loss: 1.3368 Acc: 0.4612 | dicentric: recall=0.900 f1=0.123, normal: recall=0.442 f1=0.611 | [dicentric_f1=0.1229]
+2026-07-11 12:43:13,478 [INFO] Fold 2 - Epoch 5/24 | Val Loss: 0.5655 Acc: 0.7883 | dicentric: recall=0.750 f1=0.229, normal: recall=0.790 f1=0.877 | [dicentric_f1=0.2290]
+2026-07-11 12:44:14,763 [INFO] Fold 2 - Epoch 10/24 | Val Loss: 0.3327 Acc: 0.9015 | dicentric: recall=0.600 f1=0.338, normal: recall=0.915 f1=0.947 | [dicentric_f1=0.3380]
+2026-07-11 12:45:15,900 [INFO] Fold 2 - Epoch 15/24 | Val Loss: 0.2503 Acc: 0.9266 | dicentric: recall=0.750 f1=0.462, normal: recall=0.934 f1=0.961 | [dicentric_f1=0.4615]
+2026-07-11 12:46:16,914 [INFO] Fold 2 - Epoch 20/24 | Val Loss: 0.1717 Acc: 0.9602 | dicentric: recall=0.650 f1=0.578, normal: recall=0.974 f1=0.979 | [dicentric_f1=0.5778]
+2026-07-11 12:47:05,855 [INFO] Fold 2 - Epoch 24/24 | Val Loss: 0.2107 Acc: 0.9392 | dicentric: recall=0.750 f1=0.508, normal: recall=0.947 f1=0.968 | [dicentric_f1=0.5085]
+2026-07-11 12:47:05,855 [INFO] Fold 2 - Entrenamiento completado en 5m 8s
+2026-07-11 12:47:05,855 [INFO] Fold 2 - Mejor dicentric_f1: 0.5882 (época 21, acc global en esa época: 0.9560)
+2026-07-11 12:47:05,855 [INFO] Fold 2 - [dicentric] precision=0.4839 recall=0.7500 f1=0.5882 support=20
+2026-07-11 12:47:05,855 [INFO] Fold 2 - [normal] precision=0.9888 recall=0.9650 f1=0.9767 support=457
+2026-07-11 12:47:05,855 [INFO] Fold 2 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[15, 5], [16, 441]]
+2026-07-11 12:47:06,013 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold2.pth
+2026-07-11 12:47:06,013 [INFO] 
+--- FOLD_3 ---
+2026-07-11 12:47:06,024 [INFO] Clases: ['dicentric', 'normal'] | train=1927 | val=483
+2026-07-11 12:47:06,025 [INFO] Distribución train: {'dicentric': 101, 'normal': 1826}
+2026-07-11 12:47:06,025 [INFO] Distribución val:   {'dicentric': 23, 'normal': 460}
+2026-07-11 12:47:06,025 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.2% del total (101/1927). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 12:47:06,025 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 12:47:06,190 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.539604187011719, 'normal': 0.527656078338623}
+2026-07-11 12:47:06,193 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 12:47:19,796 [INFO] Fold 3 - Epoch 0/24 | Val Loss: 1.9903 Acc: 0.1242 | dicentric: recall=1.000 f1=0.098, normal: recall=0.080 f1=0.149 | [dicentric_f1=0.0981]
+2026-07-11 12:48:22,234 [INFO] Fold 3 - Epoch 5/24 | Val Loss: 0.8472 Acc: 0.7267 | dicentric: recall=0.957 f1=0.250, normal: recall=0.715 f1=0.833 | [dicentric_f1=0.2500]
+2026-07-11 12:49:23,883 [INFO] Fold 3 - Epoch 10/24 | Val Loss: 0.3838 Acc: 0.8716 | dicentric: recall=0.826 f1=0.380, normal: recall=0.874 f1=0.928 | [dicentric_f1=0.3800]
+2026-07-11 12:50:25,414 [INFO] Fold 3 - Epoch 15/24 | Val Loss: 0.2506 Acc: 0.9130 | dicentric: recall=0.739 f1=0.447, normal: recall=0.922 f1=0.953 | [dicentric_f1=0.4474]
+2026-07-11 12:51:27,282 [INFO] Fold 3 - Epoch 20/24 | Val Loss: 0.1750 Acc: 0.9379 | dicentric: recall=0.783 f1=0.545, normal: recall=0.946 f1=0.967 | [dicentric_f1=0.5455]
+2026-07-11 12:52:16,645 [INFO] Fold 3 - Epoch 24/24 | Val Loss: 0.1886 Acc: 0.9337 | dicentric: recall=0.609 f1=0.467, normal: recall=0.950 f1=0.965 | [dicentric_f1=0.4667]
+2026-07-11 12:52:16,645 [INFO] Fold 3 - Entrenamiento completado en 5m 10s
+2026-07-11 12:52:16,645 [INFO] Fold 3 - Mejor dicentric_f1: 0.5614 (época 22, acc global en esa época: 0.9482)
+2026-07-11 12:52:16,645 [INFO] Fold 3 - [dicentric] precision=0.4706 recall=0.6957 f1=0.5614 support=23
+2026-07-11 12:52:16,646 [INFO] Fold 3 - [normal] precision=0.9844 recall=0.9609 f1=0.9725 support=460
+2026-07-11 12:52:16,646 [INFO] Fold 3 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[16, 7], [18, 442]]
+2026-07-11 12:52:16,805 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold3.pth
+2026-07-11 12:52:16,805 [INFO] 
+--- FOLD_4 ---
+2026-07-11 12:52:16,817 [INFO] Clases: ['dicentric', 'normal'] | train=1925 | val=485
+2026-07-11 12:52:16,817 [INFO] Distribución train: {'dicentric': 96, 'normal': 1829}
+2026-07-11 12:52:16,817 [INFO] Distribución val:   {'dicentric': 28, 'normal': 457}
+2026-07-11 12:52:16,817 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.0% del total (96/1925). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 12:52:16,818 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 12:52:16,983 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 10.026041984558105, 'normal': 0.5262438654899597}
+2026-07-11 12:52:16,985 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 12:52:30,195 [INFO] Fold 4 - Epoch 0/24 | Val Loss: 1.3373 Acc: 0.3918 | dicentric: recall=0.893 f1=0.145, normal: recall=0.361 f1=0.528 | [dicentric_f1=0.1449]
+2026-07-11 12:53:32,039 [INFO] Fold 4 - Epoch 5/24 | Val Loss: 0.6364 Acc: 0.7979 | dicentric: recall=0.893 f1=0.338, normal: recall=0.792 f1=0.881 | [dicentric_f1=0.3378]
+2026-07-11 12:54:33,315 [INFO] Fold 4 - Epoch 10/24 | Val Loss: 0.3389 Acc: 0.8825 | dicentric: recall=0.857 f1=0.457, normal: recall=0.884 f1=0.934 | [dicentric_f1=0.4571]
+2026-07-11 12:55:34,365 [INFO] Fold 4 - Epoch 15/24 | Val Loss: 0.2600 Acc: 0.9299 | dicentric: recall=0.857 f1=0.585, normal: recall=0.934 f1=0.962 | [dicentric_f1=0.5854]
+2026-07-11 12:56:35,283 [INFO] Fold 4 - Epoch 20/24 | Val Loss: 0.3020 Acc: 0.9237 | dicentric: recall=0.929 f1=0.584, normal: recall=0.923 f1=0.958 | [dicentric_f1=0.5843]
+2026-07-11 12:57:24,228 [INFO] Fold 4 - Epoch 24/24 | Val Loss: 0.2044 Acc: 0.9381 | dicentric: recall=0.750 f1=0.583, normal: recall=0.950 f1=0.967 | [dicentric_f1=0.5833]
+2026-07-11 12:57:24,229 [INFO] Fold 4 - Entrenamiento completado en 5m 7s
+2026-07-11 12:57:24,229 [INFO] Fold 4 - Mejor dicentric_f1: 0.6250 (época 21, acc global en esa época: 0.9381)
+2026-07-11 12:57:24,229 [INFO] Fold 4 - [dicentric] precision=0.4808 recall=0.8929 f1=0.6250 support=28
+2026-07-11 12:57:24,229 [INFO] Fold 4 - [normal] precision=0.9931 recall=0.9409 f1=0.9663 support=457
+2026-07-11 12:57:24,229 [INFO] Fold 4 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[25, 3], [27, 430]]
+2026-07-11 12:57:24,386 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold4.pth
+2026-07-11 12:57:24,395 [INFO] 
+[OK] Historial completo (todas las épocas, todos los folds) guardado en: models\classifier\cnn_sr_s15_metrics.json
+2026-07-11 12:57:24,396 [INFO] [OK] Resumen por fold guardado en: models\classifier\cnn_sr_s15_summary.csv
+2026-07-11 12:57:24,396 [INFO] [INFO] dicentric_f1 medio entre folds (métrica de selección): 0.6171 (+/- 0.0372)
+2026-07-11 12:57:24,397 [INFO] [INFO] Val Acc media entre folds (referencia, poco fiable si hay desbalance): 0.9515 (+/- 0.0077)
+2026-07-11 12:57:24,397 [INFO] [INFO] [dicentric] Recall medio: 0.7617 (+/- 0.0732) | F1 medio: 0.6171 (+/- 0.0372)
+2026-07-11 12:57:24,397 [INFO] [INFO] [normal] Recall medio: 0.9615 (+/- 0.0114) | F1 medio: 0.9741 (+/- 0.0044)
+2026-07-11 12:57:24,397 [INFO] 
+[INFO] Entrenamiento K-Fold de Clasificador completado.
+2026-07-11 17:02:39,357 [INFO] ============================================================
+2026-07-11 17:02:39,357 [INFO] ENTRENAMIENTO CLASIFICADOR: sr_s15
+2026-07-11 17:02:39,357 [INFO] Folds detectados: ['fold_0', 'fold_1', 'fold_2', 'fold_3', 'fold_4']
+2026-07-11 17:02:39,357 [INFO] Device: cuda:0
+2026-07-11 17:02:39,357 [INFO] Early stopping patience: 10
+2026-07-11 17:02:39,357 [INFO] ============================================================
+2026-07-11 17:02:39,357 [INFO] 
+--- FOLD_0 ---
+2026-07-11 17:02:39,372 [INFO] Clases: ['dicentric', 'normal'] | train=1925 | val=485
+2026-07-11 17:02:39,372 [INFO] Distribución train: {'dicentric': 97, 'normal': 1828}
+2026-07-11 17:02:39,373 [INFO] Distribución val:   {'dicentric': 27, 'normal': 458}
+2026-07-11 17:02:39,373 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.0% del total (97/1925). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 17:02:39,373 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 17:02:39,639 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.922680854797363, 'normal': 0.5265317559242249}
+2026-07-11 17:02:39,641 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 17:02:51,274 [INFO] Fold 0 - Epoch 0/49 | Val Loss: 1.4979 Acc: 0.3216 | dicentric: recall=0.963 f1=0.136, normal: recall=0.284 f1=0.441 | [dicentric_f1=0.1365]
+2026-07-11 17:03:45,312 [INFO] Fold 0 - Epoch 5/49 | Val Loss: 0.4002 Acc: 0.8557 | dicentric: recall=0.926 f1=0.417, normal: recall=0.852 f1=0.918 | [dicentric_f1=0.4167]
+2026-07-11 17:04:39,346 [INFO] Fold 0 - Epoch 10/49 | Val Loss: 0.2984 Acc: 0.9072 | dicentric: recall=0.741 f1=0.471, normal: recall=0.917 f1=0.949 | [dicentric_f1=0.4706]
+2026-07-11 17:05:33,304 [INFO] Fold 0 - Epoch 15/49 | Val Loss: 0.2835 Acc: 0.9278 | dicentric: recall=0.926 f1=0.588, normal: recall=0.928 f1=0.960 | [dicentric_f1=0.5882]
+2026-07-11 17:06:27,376 [INFO] Fold 0 - Epoch 20/49 | Val Loss: 0.3079 Acc: 0.9175 | dicentric: recall=0.889 f1=0.545, normal: recall=0.919 f1=0.955 | [dicentric_f1=0.5455]
+2026-07-11 17:07:21,287 [INFO] Fold 0 - Epoch 25/49 | Val Loss: 0.2413 Acc: 0.9526 | dicentric: recall=0.852 f1=0.667, normal: recall=0.959 f1=0.974 | [dicentric_f1=0.6667]
+2026-07-11 17:08:14,942 [INFO] Fold 0 - Epoch 30/49 | Val Loss: 0.2414 Acc: 0.9526 | dicentric: recall=0.778 f1=0.646, normal: recall=0.963 f1=0.975 | [dicentric_f1=0.6462]
+2026-07-11 17:08:47,521 [INFO] Fold 0 - Early stopping en la época 33 (sin mejora en dicentric_f1 durante 10 épocas seguidas).
+2026-07-11 17:08:47,521 [INFO] Fold 0 - Entrenamiento completado en 6m 8s
+2026-07-11 17:08:47,521 [INFO] Fold 0 - Mejor dicentric_f1: 0.7500 (época 23, acc global en esa época: 0.9670)
+2026-07-11 17:08:47,521 [INFO] Fold 0 - [dicentric] precision=0.6486 recall=0.8889 f1=0.7500 support=27
+2026-07-11 17:08:47,521 [INFO] Fold 0 - [normal] precision=0.9933 recall=0.9716 f1=0.9823 support=458
+2026-07-11 17:08:47,521 [INFO] Fold 0 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[24, 3], [13, 445]]
+2026-07-11 17:08:47,648 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold0.pth
+2026-07-11 17:08:47,648 [INFO] 
+--- FOLD_1 ---
+2026-07-11 17:08:47,672 [INFO] Clases: ['dicentric', 'normal'] | train=1930 | val=480
+2026-07-11 17:08:47,672 [INFO] Distribución train: {'dicentric': 98, 'normal': 1832}
+2026-07-11 17:08:47,672 [INFO] Distribución val:   {'dicentric': 26, 'normal': 454}
+2026-07-11 17:08:47,672 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.1% del total (98/1930). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 17:08:47,673 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 17:08:47,824 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.846939086914062, 'normal': 0.5267467498779297}
+2026-07-11 17:08:47,826 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 17:08:58,994 [INFO] Fold 1 - Epoch 0/49 | Val Loss: 1.3384 Acc: 0.3708 | dicentric: recall=1.000 f1=0.147, normal: recall=0.335 f1=0.502 | [dicentric_f1=0.1469]
+2026-07-11 17:09:53,609 [INFO] Fold 1 - Epoch 5/49 | Val Loss: 0.7706 Acc: 0.7333 | dicentric: recall=0.885 f1=0.264, normal: recall=0.725 f1=0.837 | [dicentric_f1=0.2644]
+2026-07-11 17:10:47,491 [INFO] Fold 1 - Epoch 10/49 | Val Loss: 0.3738 Acc: 0.8875 | dicentric: recall=0.808 f1=0.438, normal: recall=0.892 f1=0.938 | [dicentric_f1=0.4375]
+2026-07-11 17:11:41,480 [INFO] Fold 1 - Epoch 15/49 | Val Loss: 0.2664 Acc: 0.9062 | dicentric: recall=0.615 f1=0.416, normal: recall=0.923 f1=0.949 | [dicentric_f1=0.4156]
+2026-07-11 17:12:35,458 [INFO] Fold 1 - Epoch 20/49 | Val Loss: 0.2026 Acc: 0.9354 | dicentric: recall=0.654 f1=0.523, normal: recall=0.952 f1=0.965 | [dicentric_f1=0.5231]
+2026-07-11 17:13:29,364 [INFO] Fold 1 - Epoch 25/49 | Val Loss: 0.1717 Acc: 0.9583 | dicentric: recall=0.654 f1=0.630, normal: recall=0.976 f1=0.978 | [dicentric_f1=0.6296]
+2026-07-11 17:14:23,272 [INFO] Fold 1 - Epoch 30/49 | Val Loss: 0.1699 Acc: 0.9625 | dicentric: recall=0.577 f1=0.625, normal: recall=0.985 f1=0.980 | [dicentric_f1=0.6250]
+2026-07-11 17:15:17,336 [INFO] Fold 1 - Epoch 35/49 | Val Loss: 0.1770 Acc: 0.9646 | dicentric: recall=0.615 f1=0.653, normal: recall=0.985 f1=0.981 | [dicentric_f1=0.6531]
+2026-07-11 17:16:11,245 [INFO] Fold 1 - Epoch 40/49 | Val Loss: 0.1852 Acc: 0.9604 | dicentric: recall=0.577 f1=0.612, normal: recall=0.982 f1=0.979 | [dicentric_f1=0.6122]
+2026-07-11 17:16:32,794 [INFO] Fold 1 - Early stopping en la época 42 (sin mejora en dicentric_f1 durante 10 épocas seguidas).
+2026-07-11 17:16:32,794 [INFO] Fold 1 - Entrenamiento completado en 7m 45s
+2026-07-11 17:16:32,794 [INFO] Fold 1 - Mejor dicentric_f1: 0.6800 (época 32, acc global en esa época: 0.9667)
+2026-07-11 17:16:32,794 [INFO] Fold 1 - [dicentric] precision=0.7083 recall=0.6538 f1=0.6800 support=26
+2026-07-11 17:16:32,794 [INFO] Fold 1 - [normal] precision=0.9803 recall=0.9846 f1=0.9824 support=454
+2026-07-11 17:16:32,794 [INFO] Fold 1 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[17, 9], [7, 447]]
+2026-07-11 17:16:32,927 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold1.pth
+2026-07-11 17:16:32,927 [INFO] 
+--- FOLD_2 ---
+2026-07-11 17:16:32,940 [INFO] Clases: ['dicentric', 'normal'] | train=1933 | val=477
+2026-07-11 17:16:32,940 [INFO] Distribución train: {'dicentric': 104, 'normal': 1829}
+2026-07-11 17:16:32,940 [INFO] Distribución val:   {'dicentric': 20, 'normal': 457}
+2026-07-11 17:16:32,940 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.4% del total (104/1933). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 17:16:32,940 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 17:16:33,097 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.293269157409668, 'normal': 0.5284308195114136}
+2026-07-11 17:16:33,101 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 17:16:44,346 [INFO] Fold 2 - Epoch 0/49 | Val Loss: 1.3841 Acc: 0.4046 | dicentric: recall=1.000 f1=0.123, normal: recall=0.379 f1=0.549 | [dicentric_f1=0.1235]
+2026-07-11 17:17:38,787 [INFO] Fold 2 - Epoch 5/49 | Val Loss: 0.4640 Acc: 0.8113 | dicentric: recall=0.800 f1=0.262, normal: recall=0.812 f1=0.892 | [dicentric_f1=0.2623]
+2026-07-11 17:18:32,890 [INFO] Fold 2 - Epoch 10/49 | Val Loss: 0.3593 Acc: 0.9015 | dicentric: recall=0.750 f1=0.390, normal: recall=0.908 f1=0.946 | [dicentric_f1=0.3896]
+2026-07-11 17:19:26,935 [INFO] Fold 2 - Epoch 15/49 | Val Loss: 0.2410 Acc: 0.9455 | dicentric: recall=0.700 f1=0.519, normal: recall=0.956 f1=0.971 | [dicentric_f1=0.5185]
+2026-07-11 17:20:21,083 [INFO] Fold 2 - Epoch 20/49 | Val Loss: 0.2717 Acc: 0.9245 | dicentric: recall=0.750 f1=0.455, normal: recall=0.932 f1=0.959 | [dicentric_f1=0.4545]
+2026-07-11 17:21:15,055 [INFO] Fold 2 - Epoch 25/49 | Val Loss: 0.1922 Acc: 0.9665 | dicentric: recall=0.750 f1=0.652, normal: recall=0.976 f1=0.982 | [dicentric_f1=0.6522]
+2026-07-11 17:22:08,778 [INFO] Fold 2 - Epoch 30/49 | Val Loss: 0.1772 Acc: 0.9644 | dicentric: recall=0.700 f1=0.622, normal: recall=0.976 f1=0.981 | [dicentric_f1=0.6222]
+2026-07-11 17:23:02,695 [INFO] Fold 2 - Epoch 35/49 | Val Loss: 0.1605 Acc: 0.9706 | dicentric: recall=0.700 f1=0.667, normal: recall=0.982 f1=0.985 | [dicentric_f1=0.6667]
+2026-07-11 17:23:56,835 [INFO] Fold 2 - Epoch 40/49 | Val Loss: 0.1609 Acc: 0.9706 | dicentric: recall=0.700 f1=0.667, normal: recall=0.982 f1=0.985 | [dicentric_f1=0.6667]
+2026-07-11 17:24:18,445 [INFO] Fold 2 - Early stopping en la época 42 (sin mejora en dicentric_f1 durante 10 épocas seguidas).
+2026-07-11 17:24:18,445 [INFO] Fold 2 - Entrenamiento completado en 7m 45s
+2026-07-11 17:24:18,445 [INFO] Fold 2 - Mejor dicentric_f1: 0.6667 (época 32, acc global en esa época: 0.9706)
+2026-07-11 17:24:18,445 [INFO] Fold 2 - [dicentric] precision=0.6364 recall=0.7000 f1=0.6667 support=20
+2026-07-11 17:24:18,445 [INFO] Fold 2 - [normal] precision=0.9868 recall=0.9825 f1=0.9846 support=457
+2026-07-11 17:24:18,445 [INFO] Fold 2 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[14, 6], [8, 449]]
+2026-07-11 17:24:18,577 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold2.pth
+2026-07-11 17:24:18,577 [INFO] 
+--- FOLD_3 ---
+2026-07-11 17:24:18,593 [INFO] Clases: ['dicentric', 'normal'] | train=1927 | val=483
+2026-07-11 17:24:18,593 [INFO] Distribución train: {'dicentric': 101, 'normal': 1826}
+2026-07-11 17:24:18,594 [INFO] Distribución val:   {'dicentric': 23, 'normal': 460}
+2026-07-11 17:24:18,594 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.2% del total (101/1927). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 17:24:18,595 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 17:24:18,851 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 9.539604187011719, 'normal': 0.527656078338623}
+2026-07-11 17:24:18,853 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 17:24:30,083 [INFO] Fold 3 - Epoch 0/49 | Val Loss: 2.0041 Acc: 0.1201 | dicentric: recall=1.000 f1=0.098, normal: recall=0.076 f1=0.141 | [dicentric_f1=0.0977]
+2026-07-11 17:25:24,711 [INFO] Fold 3 - Epoch 5/49 | Val Loss: 0.6562 Acc: 0.7578 | dicentric: recall=0.957 f1=0.273, normal: recall=0.748 f1=0.855 | [dicentric_f1=0.2733]
+2026-07-11 17:26:19,153 [INFO] Fold 3 - Epoch 10/49 | Val Loss: 0.4484 Acc: 0.8509 | dicentric: recall=0.783 f1=0.333, normal: recall=0.854 f1=0.916 | [dicentric_f1=0.3333]
+2026-07-11 17:27:13,458 [INFO] Fold 3 - Epoch 15/49 | Val Loss: 0.3575 Acc: 0.8778 | dicentric: recall=0.826 f1=0.392, normal: recall=0.880 f1=0.932 | [dicentric_f1=0.3918]
+2026-07-11 17:28:07,903 [INFO] Fold 3 - Epoch 20/49 | Val Loss: 0.2551 Acc: 0.9213 | dicentric: recall=0.739 f1=0.472, normal: recall=0.930 f1=0.957 | [dicentric_f1=0.4722]
+2026-07-11 17:29:02,105 [INFO] Fold 3 - Epoch 25/49 | Val Loss: 0.2038 Acc: 0.9379 | dicentric: recall=0.652 f1=0.500, normal: recall=0.952 f1=0.967 | [dicentric_f1=0.5000]
+2026-07-11 17:29:56,931 [INFO] Fold 3 - Epoch 30/49 | Val Loss: 0.1693 Acc: 0.9482 | dicentric: recall=0.652 f1=0.545, normal: recall=0.963 f1=0.973 | [dicentric_f1=0.5455]
+2026-07-11 17:30:51,283 [INFO] Fold 3 - Epoch 35/49 | Val Loss: 0.1751 Acc: 0.9462 | dicentric: recall=0.696 f1=0.552, normal: recall=0.959 f1=0.971 | [dicentric_f1=0.5517]
+2026-07-11 17:31:45,647 [INFO] Fold 3 - Epoch 40/49 | Val Loss: 0.2216 Acc: 0.9420 | dicentric: recall=0.739 f1=0.548, normal: recall=0.952 f1=0.969 | [dicentric_f1=0.5484]
+2026-07-11 17:32:18,382 [INFO] Fold 3 - Early stopping en la época 43 (sin mejora en dicentric_f1 durante 10 épocas seguidas).
+2026-07-11 17:32:18,382 [INFO] Fold 3 - Entrenamiento completado en 7m 60s
+2026-07-11 17:32:18,382 [INFO] Fold 3 - Mejor dicentric_f1: 0.6122 (época 33, acc global en esa época: 0.9607)
+2026-07-11 17:32:18,382 [INFO] Fold 3 - [dicentric] precision=0.5769 recall=0.6522 f1=0.6122 support=23
+2026-07-11 17:32:18,382 [INFO] Fold 3 - [normal] precision=0.9825 recall=0.9761 f1=0.9793 support=460
+2026-07-11 17:32:18,384 [INFO] Fold 3 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[15, 8], [11, 449]]
+2026-07-11 17:32:18,516 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold3.pth
+2026-07-11 17:32:18,516 [INFO] 
+--- FOLD_4 ---
+2026-07-11 17:32:18,529 [INFO] Clases: ['dicentric', 'normal'] | train=1925 | val=485
+2026-07-11 17:32:18,529 [INFO] Distribución train: {'dicentric': 96, 'normal': 1829}
+2026-07-11 17:32:18,529 [INFO] Distribución val:   {'dicentric': 28, 'normal': 457}
+2026-07-11 17:32:18,530 [WARNING] [DESBALANCE] En train, la clase 'dicentric' representa solo 5.0% del total (96/1925). La accuracy global puede ser engañosa: revisa precision/recall/F1 por clase más abajo.
+2026-07-11 17:32:18,530 [INFO] Usando WeightedRandomSampler balanceado en el train DataLoader (cada batch tenderá a tener proporción similar de clases).
+2026-07-11 17:32:18,694 [INFO] Usando CrossEntropyLoss balanceada. Pesos por clase {'dicentric': 10.026041984558105, 'normal': 0.5262438654899597}
+2026-07-11 17:32:18,698 [INFO] Usando ReduceLROnPlateau (factor=0.5, patience=3) sobre val_loss.
+2026-07-11 17:32:29,601 [INFO] Fold 4 - Epoch 0/49 | Val Loss: 1.6478 Acc: 0.3134 | dicentric: recall=0.964 f1=0.140, normal: recall=0.274 f1=0.429 | [dicentric_f1=0.1395]
+2026-07-11 17:33:23,579 [INFO] Fold 4 - Epoch 5/49 | Val Loss: 0.5471 Acc: 0.8082 | dicentric: recall=0.821 f1=0.331, normal: recall=0.807 f1=0.888 | [dicentric_f1=0.3309]
+2026-07-11 17:34:17,660 [INFO] Fold 4 - Epoch 10/49 | Val Loss: 0.2850 Acc: 0.9052 | dicentric: recall=0.786 f1=0.489, normal: recall=0.912 f1=0.948 | [dicentric_f1=0.4889]
+2026-07-11 17:35:11,730 [INFO] Fold 4 - Epoch 15/49 | Val Loss: 0.5205 Acc: 0.8495 | dicentric: recall=0.893 f1=0.407, normal: recall=0.847 f1=0.914 | [dicentric_f1=0.4065]
+2026-07-11 17:36:05,846 [INFO] Fold 4 - Epoch 20/49 | Val Loss: 0.2974 Acc: 0.9113 | dicentric: recall=0.857 f1=0.527, normal: recall=0.915 f1=0.951 | [dicentric_f1=0.5275]
+2026-07-11 17:36:59,659 [INFO] Fold 4 - Epoch 25/49 | Val Loss: 0.2331 Acc: 0.9381 | dicentric: recall=0.857 f1=0.615, normal: recall=0.943 f1=0.966 | [dicentric_f1=0.6154]
+2026-07-11 17:37:53,596 [INFO] Fold 4 - Epoch 30/49 | Val Loss: 0.1768 Acc: 0.9567 | dicentric: recall=0.821 f1=0.687, normal: recall=0.965 f1=0.977 | [dicentric_f1=0.6866]
+2026-07-11 17:38:47,557 [INFO] Fold 4 - Epoch 35/49 | Val Loss: 0.3783 Acc: 0.9093 | dicentric: recall=0.857 f1=0.522, normal: recall=0.912 f1=0.950 | [dicentric_f1=0.5217]
+2026-07-11 17:39:41,401 [INFO] Fold 4 - Epoch 40/49 | Val Loss: 0.2325 Acc: 0.9464 | dicentric: recall=0.857 f1=0.649, normal: recall=0.952 f1=0.971 | [dicentric_f1=0.6486]
+2026-07-11 17:40:03,158 [INFO] Fold 4 - Early stopping en la época 42 (sin mejora en dicentric_f1 durante 10 épocas seguidas).
+2026-07-11 17:40:03,158 [INFO] Fold 4 - Entrenamiento completado en 7m 44s
+2026-07-11 17:40:03,158 [INFO] Fold 4 - Mejor dicentric_f1: 0.7302 (época 32, acc global en esa época: 0.9649)
+2026-07-11 17:40:03,158 [INFO] Fold 4 - [dicentric] precision=0.6571 recall=0.8214 f1=0.7302 support=28
+2026-07-11 17:40:03,158 [INFO] Fold 4 - [normal] precision=0.9889 recall=0.9737 f1=0.9813 support=457
+2026-07-11 17:40:03,158 [INFO] Fold 4 - Matriz de confusión (val, mejor época) ['dicentric', 'normal']: [[23, 5], [12, 445]]
+2026-07-11 17:40:03,286 [INFO] Modelo guardado en models\classifier\cnn_sr_s15_fold4.pth
+2026-07-11 17:40:03,298 [INFO] 
+[OK] Historial completo (todas las épocas, todos los folds) guardado en: models\classifier\cnn_sr_s15_metrics.json
+2026-07-11 17:40:03,299 [INFO] [OK] Resumen por fold guardado en: models\classifier\cnn_sr_s15_summary.csv
+2026-07-11 17:40:03,299 [INFO] [INFO] dicentric_f1 medio entre folds (métrica de selección): 0.6878 (+/- 0.0487)
+2026-07-11 17:40:03,299 [INFO] [INFO] Val Acc media entre folds (referencia, poco fiable si hay desbalance): 0.9660 (+/- 0.0032)
+2026-07-11 17:40:03,299 [INFO] [INFO] [dicentric] Recall medio: 0.7433 (+/- 0.0954) | F1 medio: 0.6878 (+/- 0.0487)
+2026-07-11 17:40:03,300 [INFO] [INFO] [normal] Recall medio: 0.9777 (+/- 0.0050) | F1 medio: 0.9820 (+/- 0.0017)
+2026-07-11 17:40:03,300 [INFO] 
+[INFO] Entrenamiento K-Fold de Clasificador completado.
